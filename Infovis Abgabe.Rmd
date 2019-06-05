@@ -1,0 +1,23 @@
+---
+title: "Infovis Abgabe"
+author: "Leonie Düttmann, Laura Schröder"
+date: "5 6 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Daten Laden
+```{r message=FALSE, warning=FALSE}
+jobs_gender <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/jobs_gender.csv")
+earnings_female <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/earnings_female.csv") 
+employed_gender <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/employed_gender.csv") 
+
+
+
+college_major <- readr::read_csv("recent-grads.csv")
+
+```
+
