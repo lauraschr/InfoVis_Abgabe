@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
 
 #Daten Laden
@@ -19,5 +20,21 @@ employed_gender <- readr::read_csv("https://raw.githubusercontent.com/rfordatasc
 
 college_major <- readr::read_csv("recent-grads.csv")
 
+```
+
+```{r}
+
+college_major %>% names()
+college_major %>% select(Men, Women, Major_category, Major) %>% 
+  gather(gender, value, -Major_category, -Major) %>% 
+  group_by(Major_category, gender) %>% 
+  summarize(subtotal = sum(value)) %>%
+  ungroup() %>% 
+  mutate(Major_category = fct_reorder(Major_category, subtotal)) %>% 
+  ggplot() +
+  aes(x = Major_category, y = subtotal, fill = gender) + geom_col() + coord_flip() +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  gghighlight::gghighlight(Major_category == "Business" || Major_category == "Education")
+View()
 ```
 
