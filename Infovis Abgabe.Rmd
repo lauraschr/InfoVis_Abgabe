@@ -37,4 +37,18 @@ college_major %>% select(Men, Women, Major_category, Major) %>%
   gghighlight::gghighlight(Major_category == "Business" || Major_category == "Education")
 View()
 ```
+#Balkendiagramm nach Arbeitszeit und Geschlecht
+```{r}
+#Data Cleaning
+work_male <- c("full_time_male", "part_time_male")
+work_female <- c("full_time_female", "part_time_female")
+work_gender <- c("wokr_male", "work_female")
+employed_gender %>% 
+  ggplot() + 
+  geom_bar() + 
+  aes(x = work_gender , y = year)
+
+
+
+```
 
