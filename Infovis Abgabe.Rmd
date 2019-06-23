@@ -40,15 +40,45 @@ View()
 #Balkendiagramm nach Arbeitszeit und Geschlecht
 ```{r}
 #Data Cleaning
-work_male <- c("full_time_male", "part_time_male")
+
+
 work_female <- c("full_time_female", "part_time_female")
-work_gender <- c("wokr_male", "work_female")
 employed_gender %>% 
   ggplot() + 
-  geom_bar() + 
-  aes(x = work_gender , y = year)
+  geom_line(stat = "identity") +
+  aes(x = work_female, y = year)
+  
+
+```
+
+#Diagramm Major Category nach Geschlecht
+```{r}
+library(ggplot2)
+
+ggplot(data = jobs_gender) +
+  aes(x = major_category, weight = year) +
+  geom_bar(fill = '#0c4c8a') +
+  theme_minimal() + 
+  coord_flip()
 
 
+ggplot(data = jobs_gender) +
+  aes(x = major_category, fill = workers_female, weight = year) +
+  geom_bar() +
+  theme_minimal()+
+  coord_flip()
+
+ggplot(data = jobs_gender) +
+  aes(x = major_category, fill = workers_male, weight = year) +
+  geom_bar() +
+  theme_minimal() + 
+  coord_flip()
+
+  
+```
+
+#Diagramm Vergleich total earnings nach Geschlecht und Major Category
+```{r}
 
 ```
 
