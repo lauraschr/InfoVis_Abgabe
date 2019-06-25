@@ -5,13 +5,25 @@ date: "5 6 2019"
 output: html_document
 ---
 
+##College Abschlüsse in den USA und das Phänomen "Gender Pay Gap"
+Hier Erklärtext zum Problem.
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+#install.packages("gridExtra")
 library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(esquisse)
+library(gridExtra)
+library(here)
+
+install.packages("devtools")
+devtools::install_github("thomasp85/patchwork")
 ```
 
-#Daten Laden
-```{r message=FALSE, warning=FALSE}
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 jobs_gender <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/jobs_gender.csv")
 earnings_female <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/earnings_female.csv") 
 employed_gender <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/employed_gender.csv") 
@@ -20,11 +32,12 @@ employed_gender <- readr::read_csv("https://raw.githubusercontent.com/rfordatasc
 
 college_major <- readr::read_csv("recent-grads.csv")
 
+rwthcolors <- hcictools::rwth.colorpalette()
+
 ```
 
-```{r}
+```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category}
 
-college_major %>% names()
 college_major %>% select(Men, Women, Major_category, Major) %>% 
   gather(gender, value, -Major_category, -Major) %>% 
   group_by(Major_category, gender) %>% 
@@ -33,25 +46,65 @@ college_major %>% select(Men, Women, Major_category, Major) %>%
   mutate(Major_category = fct_reorder(Major_category, subtotal)) %>% 
   ggplot() +
   aes(x = Major_category, y = subtotal, fill = gender) + geom_col() + coord_flip() +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-  gghighlight::gghighlight(Major_category == "Business" || Major_category == "Education")
-View()
-```
-#Balkendiagramm nach Arbeitszeit und Geschlecht
-```{r}
-#Data Cleaning
-
-
-work_female <- c("full_time_female", "part_time_female")
-employed_gender %>% 
-  ggplot() + 
-  geom_line(stat = "identity") +
-  aes(x = work_female, y = year)
+  scale_fill_manual(values = c(rwthcolors$blue, rwthcolors$red)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) 
+  
+  
+  
   
 
+jobs_gender %>% select(major_category, minor_category, workers_male, workers_female) %>% 
+  gather(gender, value, -major_category, -minor_category) %>% 
+  group_by(major_category, gender) %>% 
+  summarize(subtotal = sum(value)) %>% 
+  ungroup() %>% 
+  mutate(major_category = fct_reorder(major_category, subtotal)) %>% 
+  ggplot() +
+  aes(x = major_category, y = subtotal, fill = gender) + geom_col() + coord_flip() +
+  scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
+ scale_y_continuous(labels = scales::percent_format(accuracy = 1)) 
+  
+
+
 ```
 
-#Diagramm Major Category nach Geschlecht
+## Anteil weiblicher und männlicher Arbeiter nach Abschlusskategorie
+Hier kommt das erste Zwischenfazit.
+
+```{r full-time und part-time Vergleich}
+
+employed_gender$full_time_female <- as.factor(employed_gender$full_time_female)
+employed_gender$full_time_male <- as.factor(employed_gender$full_time_male)
+employed_gender$part_time_female <- as.factor(employed_gender$part_time_female)
+employed_gender$part_time_male <- as.factor(employed_gender$part_time_male)
+
+total_work <- list (WORK = c("full_time_female", "full_time_male", "part_time_female", "part_time_male"))
+
+employed_gender %>% 
+  filter(year == 2013) %>% 
+ggplot() +
+  aes(x = year, y = total_work) + 
+  geom_bar(stat = "identity") +
+  theme_minimal() + coord_flip()
+
+#Funktioniert natürlich so nicht. Fehlermeldung spricht von Listen
+
+employed_gender %>% 
+ mutate(
+         full_time_female = full_time_female/100,
+         full_time_male = full_time_male/100,
+        part_time_female = part_time_female/100,
+        part_time_male = part_time_male/100) %>% 
+  gather(key, value) %>% 
+  ggplot() +
+  aes(x = year, y = ) +
+  geom_bar()
+
+#ICH WILL NICHT MEHR  
+
+```
+
+
 ```{r}
 library(ggplot2)
 
@@ -77,8 +130,23 @@ ggplot(data = jobs_gender) +
   
 ```
 
-#Diagramm Vergleich total earnings nach Geschlecht und Major Category
-```{r}
 
+```{r Vergleich Gehalt Männer und Frauen}
+
+
+jobs_gender %>% 
+  ggplot() +
+  aes(x = major_category, y = total_earnings_male) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  
+  jobs_gender %>% 
+   ggplot() +
+  aes(x = major_category, y = total_earnings_female) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+
+ 
 ```
 
