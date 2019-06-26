@@ -8,8 +8,7 @@ output: html_document
 ##College Abschlüsse in den USA und das Phänomen "Gender Pay Gap"
 Hier Erklärtext zum Problem.
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
+knitr::opts_chunk$set(warning = FALSE, echo = FALSE)
 #install.packages("gridExtra")
 library(tidyverse)
 library(lubridate)
@@ -23,7 +22,7 @@ library(here)
 ```
 
 
-```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 jobs_gender <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/jobs_gender.csv")
 earnings_female <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/earnings_female.csv") 
 employed_gender <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-03-05/employed_gender.csv") 
@@ -35,8 +34,9 @@ college_major <- readr::read_csv("recent-grads.csv")
 rwthcolors <- hcictools::rwth.colorpalette()
 
 ```
+### College Abschlüsse und Arbeitsbereiche nach Geschlecht
 
-```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category}
+```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category, echo=FALSE}
 
 college_major %>% select(Men, Women, Major_category, Major) %>% 
   gather(gender, value, -Major_category, -Major) %>% 
@@ -48,10 +48,7 @@ college_major %>% select(Men, Women, Major_category, Major) %>%
   aes(x = Major_category, y = subtotal, fill = gender) + geom_col() + coord_flip() +
   scale_fill_manual(values = c(rwthcolors$blue, rwthcolors$red)) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) 
-  
-  
-  
-  
+
 
 
 jobs_gender %>% select(major_category, minor_category, workers_male, workers_female) %>% 
@@ -61,7 +58,7 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
   ungroup() %>% 
   mutate(major_category = fct_reorder(major_category, subtotal)) %>% 
   ggplot() +
-  aes(x = major_category, y = subtotal, fill = gender) + geom_col(position = "dodge") + coord_flip() +
+  aes(x = major_category, y = subtotal, fill = gender) + geom_col() + coord_flip() +
   scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) 
   
@@ -69,14 +66,17 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
 
 ```
 
-## Anteil weiblicher und männlicher Arbeiter nach Abschlusskategorie
+### Ergebnisanalyse I
 Hier kommt das erste Zwischenfazit.
+
+### Wer arbeitet eigentlich mehr Vollzeit?
+Phänomen Frauen arbeiten oft auf Teilzeit, um bei den Kindern zu bleiben blabla.
 
 ```{r full-time und part-time Vergleich}
 
 total_work <- list (WORK = c("full_time_female", "full_time_male", "part_time_female", "part_time_male"))
 
-
+#Version 1
 employed_gender %>% 
   filter(year == 2013) %>% 
   select(-starts_with("total")) %>% 
@@ -93,11 +93,44 @@ employed_gender %>%
   geom_bar(stat = "identity") +
   theme_minimal() +
   scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
+# Version 2
 
+employed_gender %>% 
+  filter(year == 2013) %>% 
+  select(-starts_with("total")) %>% 
+  gather(variable, value, -year) %>%
+  mutate(gender = case_when(
+    str_detect(variable, "female") ~ "female",
+    str_detect(variable, "male") ~ "male"),
+    type_of_work = case_when(
+    str_detect(variable, "part") ~ "part time",
+    str_detect(variable, "full") ~ "full time")) %>%  
+  mutate(value = value / 100) %>% 
+  ggplot() +
+  aes(x = gender, y = value, fill = type_of_work) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_minimal() +
+  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
 
+# Das macht dann eher wenig Sinn? Full-time und part-time hat sich bei Frauen über die Jahre nicht verändert.
+employed_gender %>% 
+  select(-starts_with("total")) %>% 
+  gather(variable, value, -year) %>%
+  mutate(gender = case_when(
+    str_detect(variable, "female") ~ "female",
+     str_detect(variable, "male") ~ "male"),
+    type_of_work = case_when(
+    str_detect(variable, "part") ~ "part time",
+    str_detect(variable, "full") ~ "full time")) %>%  
+  mutate(value = value / 100) %>% 
+  ggplot() +
+  aes(x = year, y = value, fill = type_of_work) + 
+ geom_smooth() 
 
 ```
 
+### Zwischenanalyse II
+Hier kommt ein Zwischenfazit. 
 
 ```{r}
 library(ggplot2)
@@ -124,9 +157,13 @@ ggplot(data = jobs_gender) +
   
 ```
 
+### Gender Pay Gap
+Schauen wir uns mal genauer an, was es mit dem Gender Pay Gap so auf sich hat. Ist das alles nur ein medial verbreitetes Problem? 
+So sah es 2013 in den USA aus. 
 
 ```{r Vergleich Gehalt Männer und Frauen}
 
+# Die beiden in ein Diagramm zur besseren Vergleichbarkeit
 
 jobs_gender %>% 
   filter(year == 2013, major_category != "Healthcare Practitioners and Technical") %>%
@@ -147,6 +184,7 @@ jobs_gender %>%
   aes(x = major_category, y = total) +
   geom_bar(stat = "identity") +
   coord_flip() 
+  
 
 
  
