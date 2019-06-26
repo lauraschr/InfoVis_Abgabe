@@ -61,7 +61,7 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
   ungroup() %>% 
   mutate(major_category = fct_reorder(major_category, subtotal)) %>% 
   ggplot() +
-  aes(x = major_category, y = subtotal, fill = gender) + geom_col(position = "fill") + coord_flip() +
+  aes(x = major_category, y = subtotal, fill = gender) + geom_col(position = "dodge") + coord_flip() +
   scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) 
   
@@ -129,18 +129,24 @@ ggplot(data = jobs_gender) +
 
 
 jobs_gender %>% 
-  filter(year == 2013) %>%
+  filter(year == 2013, major_category != "Healthcare Practitioners and Technical") %>%
   select(major_category, total_earnings_male) %>% 
   group_by(major_category) %>% 
   summarise(total = mean(total_earnings_male)) %>% 
-   #gather(variable, value, -year, -major_category, -total_earnings_male) %>%
-  #mutate(value = value) %>%
   ggplot() +
   aes(x = major_category, y = total) +
   geom_bar(stat = "identity") +
   coord_flip() 
 
-  
+  jobs_gender %>% 
+  filter(year == 2013, major_category != "Healthcare Practitioners and Technical") %>%
+  select(major_category, total_earnings_female) %>% 
+  group_by(major_category) %>% 
+  summarise(total = mean(total_earnings_female)) %>% 
+  ggplot() +
+  aes(x = major_category, y = total) +
+  geom_bar(stat = "identity") +
+  coord_flip() 
 
 
  
