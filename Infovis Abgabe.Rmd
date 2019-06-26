@@ -18,8 +18,8 @@ library(esquisse)
 library(gridExtra)
 library(here)
 
-install.packages("devtools")
-devtools::install_github("thomasp85/patchwork")
+#install.packages("devtools")
+#devtools::install_github("thomasp85/patchwork")
 ```
 
 
@@ -53,6 +53,7 @@ college_major %>% select(Men, Women, Major_category, Major) %>%
   
   
 
+
 jobs_gender %>% select(major_category, minor_category, workers_male, workers_female) %>% 
   gather(gender, value, -major_category, -minor_category) %>% 
   group_by(major_category, gender) %>% 
@@ -60,7 +61,7 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
   ungroup() %>% 
   mutate(major_category = fct_reorder(major_category, subtotal)) %>% 
   ggplot() +
-  aes(x = major_category, y = subtotal, fill = gender) + geom_col() + coord_flip() +
+  aes(x = major_category, y = subtotal, fill = gender) + geom_col(position = "fill") + coord_flip() +
   scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) 
   
@@ -73,34 +74,27 @@ Hier kommt das erste Zwischenfazit.
 
 ```{r full-time und part-time Vergleich}
 
-employed_gender$full_time_female <- as.factor(employed_gender$full_time_female)
-employed_gender$full_time_male <- as.factor(employed_gender$full_time_male)
-employed_gender$part_time_female <- as.factor(employed_gender$part_time_female)
-employed_gender$part_time_male <- as.factor(employed_gender$part_time_male)
-
 total_work <- list (WORK = c("full_time_female", "full_time_male", "part_time_female", "part_time_male"))
+
 
 employed_gender %>% 
   filter(year == 2013) %>% 
-ggplot() +
-  aes(x = year, y = total_work) + 
-  geom_bar(stat = "identity") +
-  theme_minimal() + coord_flip()
-
-#Funktioniert natürlich so nicht. Fehlermeldung spricht von Listen
-
-employed_gender %>% 
- mutate(
-         full_time_female = full_time_female/100,
-         full_time_male = full_time_male/100,
-        part_time_female = part_time_female/100,
-        part_time_male = part_time_male/100) %>% 
-  gather(key, value) %>% 
+  select(-starts_with("total")) %>% 
+  gather(variable, value, -year) %>%
+  mutate(gender = case_when(
+    str_detect(variable, "female") ~ "female",
+    str_detect(variable, "male") ~ "male"),
+    type_of_work = case_when(
+    str_detect(variable, "part") ~ "part time",
+    str_detect(variable, "full") ~ "full time")) %>%  
+  mutate(value = value / 100) %>% 
   ggplot() +
-  aes(x = year, y = ) +
-  geom_bar()
+  aes(x = gender, y = value, fill = type_of_work) + 
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
 
-#ICH WILL NICHT MEHR  
+
 
 ```
 
@@ -135,16 +129,18 @@ ggplot(data = jobs_gender) +
 
 
 jobs_gender %>% 
+  filter(year == 2013) %>%
+  select(major_category, total_earnings_male) %>% 
+  group_by(major_category) %>% 
+  summarise(total = mean(total_earnings_male)) %>% 
+   #gather(variable, value, -year, -major_category, -total_earnings_male) %>%
+  #mutate(value = value) %>%
   ggplot() +
-  aes(x = major_category, y = total_earnings_male) +
+  aes(x = major_category, y = total) +
   geom_bar(stat = "identity") +
-  coord_flip() +
+  coord_flip() 
+
   
-  jobs_gender %>% 
-   ggplot() +
-  aes(x = major_category, y = total_earnings_female) +
-  geom_bar(stat = "identity") +
-  coord_flip()
 
 
  
