@@ -76,6 +76,22 @@ Phänomen Frauen arbeiten oft auf Teilzeit, um bei den Kindern zu bleiben blabla
 
 total_work <- list (WORK = c("full_time_female", "full_time_male", "part_time_female", "part_time_male"))
 
+college_major %>% 
+  select(Men, Women, Full_time, Part_time) %>% 
+  gather(gender, variable, value, -year) %>%
+  summarize(subtotal = sum(value)) %>% 
+  mutate(Full_time = fct_reorder(Full_time, subtotal)) %>% 
+  mutate(Part_time = fct_reorder(Part_time, subtotal)) %>% 
+  mutate(type_of_work = case_when(
+    str_detect(variable, "Part") ~ "part time",
+    str_detect(variable, "Full") ~ "full time")) %>%  
+  mutate(value = value / 100) %>% 
+  ggplot() +
+  aes(x = gender, y = subtotal, fill = type_of_work) + 
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
+
 #Version 1
 employed_gender %>% 
   filter(year == 2013) %>% 
@@ -184,8 +200,30 @@ jobs_gender %>%
   aes(x = major_category, y = total) +
   geom_bar(stat = "identity") +
   coord_flip() 
-  
 
+  total_lohn_female <- c("total_earnings_female")
+  total_earnings_male <-c("total_earnings_male")
+  
+  jobs_gender %>%   
+filter(year == 2013, major_category != "Healthcare Practitioners and Technical") %>% 
+  select(-starts_with("total")) %>% 
+  gather(variable, value, -year, -major_category) %>%
+    group_by (major_category) %>% 
+    summarise(total = mean(total_lohn_female),
+              total = mean(total_earnings_male)) %>% 
+  mutate(gender = case_when(
+    str_detect(variable, "female") ~ "female",
+    str_detect(variable, "male") ~ "male"),
+    gehalt = case_when(
+    str_detect(variable, "lohn") ~ "lohn female",
+    str_detect(variable, "earnings") ~ "earnings male")) %>%  
+  mutate(value = value / 100) %>% 
+  ggplot() +
+  aes(x = major_category, y = value, fill = gehalt) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_minimal() +
+    coord_flip() +
+  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
 
  
 ```
