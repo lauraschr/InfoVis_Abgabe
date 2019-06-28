@@ -92,6 +92,7 @@ college_major %>%
   theme_minimal() +
   scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
 
+
 #Version 1
 employed_gender %>% 
   filter(year == 2013) %>% 
@@ -109,6 +110,9 @@ employed_gender %>%
   geom_bar(stat = "identity") +
   theme_minimal() +
   scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
+
+
+
 # Version 2
 
 employed_gender %>% 
@@ -202,12 +206,13 @@ jobs_gender %>%
   coord_flip() 
 
   total_lohn_female <- c("total_earnings_female")
-  total_earnings_male <-c("total_earnings_male")
+  total_lohn_male <- c("total_earnings_male")
+ 
   
-  jobs_gender %>%   
+   jobs_gender %>%   
 filter(year == 2013, major_category != "Healthcare Practitioners and Technical") %>% 
   select(-starts_with("total")) %>% 
-  gather(variable, value, -year, -major_category) %>%
+  gather(gender, variable, value, -year, -major_category) %>%
     group_by (major_category) %>% 
     summarise(total = mean(total_lohn_female),
               total = mean(total_earnings_male)) %>% 
@@ -225,6 +230,15 @@ filter(year == 2013, major_category != "Healthcare Practitioners and Technical")
     coord_flip() +
   scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
 
- 
+ #Version Leonie
+jobs_gender %>% 
+  filter(year == 2013, major_category!= "Healthcare Practitioners and Technical") %>% 
+  select(major_category, year, total_earnings, total_earnings_male, total_earnings_female) %>% 
+  gather(gender, variable, -year, -major_category, -total_earnings) %>% 
+  group_by (major_category) %>% 
+  mutate(gender = case_when(
+    str_detect(variable, "female") ~ "female",
+    str_detect(variable, "male") ~ "male")) 
+   
 ```
 
