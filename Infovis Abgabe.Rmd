@@ -17,8 +17,6 @@ library(esquisse)
 library(gridExtra)
 library(here)
 
-#install.packages("devtools")
-#devtools::install_github("thomasp85/patchwork")
 ```
 
 
@@ -35,6 +33,7 @@ rwthcolors <- hcictools::rwth.colorpalette()
 
 ```
 ### College Abschlüsse und Arbeitsbereiche nach Geschlecht
+Erklärtext blabla
 
 ```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category, echo=FALSE}
 
@@ -47,7 +46,12 @@ college_major %>% select(Men, Women, Major_category, Major) %>%
   ggplot() +
   aes(x = Major_category, y = subtotal, fill = gender) + geom_col() + coord_flip() +
   scale_fill_manual(values = c(rwthcolors$blue, rwthcolors$red)) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) 
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Es herrscht ein ausgeglichenes Verhältnis im Business Sektor",
+       subtitle = "Balkendiagramm von Abschluss nach Geschlecht",
+       x = "Major Category",
+       y = "Häufigkeit (in Prozent)",
+       fill = "Legend")
 
 
 
@@ -60,57 +64,45 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
   ggplot() +
   aes(x = major_category, y = subtotal, fill = gender) + geom_col() + coord_flip() +
   scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
- scale_y_continuous(labels = scales::percent_format(accuracy = 1)) 
+ scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "In Büro-Jobs ist das Verhältnis relativ ausgeglichen",
+       subtitle = "Balkendiagramm von Job Kategorie nach Geschlecht",
+       x = "Major Category",
+       y = "Häufigkeit (in Prozent)",
+       fill = "Legend")
   
 
 
 ```
 
-### Ergebnisanalyse I
-Hier kommt das erste Zwischenfazit.
+#### Ergebnisanalyse I
+Hier kommt das erste Zwischenfazit. Keyfindings I: Business Sektor relativ ausgegleichen, ebenso sozialer Bereich. Technischer Bereich eher Männer; Gesundheit, Psychologie eher Frauen.
+Keyfindings II: Business und Service sehr ausgeglichen; Produktion, Construction Work und Technik eher Männer; Gesundhei, Kunst und Medien eher Frauen.
 
 ### Wer arbeitet eigentlich mehr Vollzeit?
 Phänomen Frauen arbeiten oft auf Teilzeit, um bei den Kindern zu bleiben blabla.
 
 ```{r full-time und part-time Vergleich}
 
-total_work <- list (WORK = c("full_time_female", "full_time_male", "part_time_female", "part_time_male"))
 
 college_major %>% 
-  select(Men, Women, Full_time, Part_time) %>% 
-  gather(gender, variable, value, -year) %>%
-  summarize(subtotal = sum(value)) %>% 
-  mutate(Full_time = fct_reorder(Full_time, subtotal)) %>% 
-  mutate(Part_time = fct_reorder(Part_time, subtotal)) %>% 
+  select(Full_time, Part_time, Unemployed) %>% 
+  gather(variable, value) %>%
   mutate(type_of_work = case_when(
     str_detect(variable, "Part") ~ "part time",
-    str_detect(variable, "Full") ~ "full time")) %>%  
+    str_detect(variable, "Full") ~ "full time",
+    str_detect(variable, "Unemployed") ~ "unemployed")) %>%  
   mutate(value = value / 100) %>% 
   ggplot() +
-  aes(x = gender, y = subtotal, fill = type_of_work) + 
-  geom_bar(stat = "identity") +
+  aes(x = type_of_work, y = value, fill = type_of_work) + 
+  geom_bar(stat = "identity", position = "dodge") +
   theme_minimal() +
-  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
-
-
-#Version 1
-employed_gender %>% 
-  filter(year == 2013) %>% 
-  select(-starts_with("total")) %>% 
-  gather(variable, value, -year) %>%
-  mutate(gender = case_when(
-    str_detect(variable, "female") ~ "female",
-    str_detect(variable, "male") ~ "male"),
-    type_of_work = case_when(
-    str_detect(variable, "part") ~ "part time",
-    str_detect(variable, "full") ~ "full time")) %>%  
-  mutate(value = value / 100) %>% 
-  ggplot() +
-  aes(x = gender, y = value, fill = type_of_work) + 
-  geom_bar(stat = "identity") +
-  theme_minimal() +
-  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
-
+  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange, rwthcolors$petrol)) +
+  labs(title = "Das Verhältnis zwischen Vollzeit, Teilzeit und arbeitslos",
+       subtitle = "Balkendiagramm",
+       x = "Type of Work",
+       y = "Absolute Häufigkeit",
+       fill = "Legend") 
 
 
 # Version 2
@@ -130,52 +122,68 @@ employed_gender %>%
   aes(x = gender, y = value, fill = type_of_work) + 
   geom_bar(stat = "identity", position = "dodge") +
   theme_minimal() +
-  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
+   scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) +
+  labs(title = "Verhältnis von Vollzeit und Teilzeit",
+       subtitle = "Balkendiagramm von Arbeitsverhältnis nach Geschlecht",
+       x = "Gender",
+       y = "Value",
+       fill = "Legend")
+  
 
 # Das macht dann eher wenig Sinn? Full-time und part-time hat sich bei Frauen über die Jahre nicht verändert.
 employed_gender %>% 
   select(-starts_with("total")) %>% 
   gather(variable, value, -year) %>%
   mutate(gender = case_when(
-    str_detect(variable, "female") ~ "female",
-     str_detect(variable, "male") ~ "male"),
+    str_detect(variable, "female") ~ "female"),
     type_of_work = case_when(
     str_detect(variable, "part") ~ "part time",
     str_detect(variable, "full") ~ "full time")) %>%  
   mutate(value = value / 100) %>% 
   ggplot() +
   aes(x = year, y = value, fill = type_of_work) + 
- geom_smooth() 
+ geom_smooth() +
+  labs(title = "Kaum Veränderung bei Beschäftigungsverhältnissen bei Frauen",
+       subtitle = "Liniendiagramm von Jahren nach Geschlecht",
+       x = "Year",
+       y = "Value (in percent)",
+       fill = "Legend")
 
 ```
 
-### Zwischenanalyse II
-Hier kommt ein Zwischenfazit. 
+#### Zwischenanalyse II
+Generell arbeiten mehr Menschen Vollzeit als Teilzeit. Bei College Abschlüssen ist die Arbeitslosigkeit vergleichsweise gering. Frauen arbeiten deutlich öfter in Teilzeit als Männer. Über die Jahre hat sich die Prozentzahl von Frauen in Voll- und Teilzeit aber kaum verändert. 
 
-```{r}
-library(ggplot2)
+### Wie sieht es in den Kategorien nach dem College aus?
+Erklärtext und so weiter.
 
-ggplot(data = jobs_gender) +
-  aes(x = major_category, weight = year) +
-  geom_bar(fill = '#0c4c8a') +
-  theme_minimal() + 
-  coord_flip()
+```{r College Jobs, Non College Jobs, Low Wage Jobs}
 
+college_major %>% 
+ select(College_jobs, Non_college_jobs, Low_wage_jobs) %>% 
+  gather(variable, value) %>%
+  mutate(jobs = case_when(
+    str_detect(variable, "College") ~ "College Jobs",
+    str_detect(variable, "Non") ~ "Non-College Jobs",
+    str_detect(variable, "Low") ~ "Low Wage Jobs")) %>%  
+  mutate(value = value / 100) %>% 
+  ggplot() +
+  aes(x = jobs, y = value, fill = jobs) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_minimal() +
+  scale_fill_manual(values = c(rwthcolors$lightblue, rwthcolors$yellow, rwthcolors$maygreen)) +
+  labs(title = "Es gibt kaum einen Unterschied zwischen College und Non-College Jobs",
+       subtitle = "Balkendiagramm von Arbeit nach Kategorie",
+       x = "Jobs",
+       y = "Value",
+       fill = "Legend")
 
-ggplot(data = jobs_gender) +
-  aes(x = major_category, fill = workers_female, weight = year) +
-  geom_bar() +
-  theme_minimal()+
-  coord_flip()
-
-ggplot(data = jobs_gender) +
-  aes(x = major_category, fill = workers_male, weight = year) +
-  geom_bar() +
-  theme_minimal() + 
-  coord_flip()
 
   
 ```
+
+#### Zwischenfazit
+Kaum Unterschied zwischen College und Non-College Jobs. Deutlicher Unterschied zu Low-Wage Jobs. Es arbeiten also weniger Absolventen im Low Wage Bereich. 
 
 ### Gender Pay Gap
 Schauen wir uns mal genauer an, was es mit dem Gender Pay Gap so auf sich hat. Ist das alles nur ein medial verbreitetes Problem? 
@@ -183,62 +191,48 @@ So sah es 2013 in den USA aus.
 
 ```{r Vergleich Gehalt Männer und Frauen}
 
-# Die beiden in ein Diagramm zur besseren Vergleichbarkeit
 
-jobs_gender %>% 
-  filter(year == 2013, major_category != "Healthcare Practitioners and Technical") %>%
-  select(major_category, total_earnings_male) %>% 
-  group_by(major_category) %>% 
-  summarise(total = mean(total_earnings_male)) %>% 
-  ggplot() +
-  aes(x = major_category, y = total) +
-  geom_bar(stat = "identity") +
-  coord_flip() 
-
-  jobs_gender %>% 
-  filter(year == 2013, major_category != "Healthcare Practitioners and Technical") %>%
-  select(major_category, total_earnings_female) %>% 
-  group_by(major_category) %>% 
-  summarise(total = mean(total_earnings_female)) %>% 
-  ggplot() +
-  aes(x = major_category, y = total) +
-  geom_bar(stat = "identity") +
-  coord_flip() 
-
-  total_lohn_female <- c("total_earnings_female")
-  total_lohn_male <- c("total_earnings_male")
- 
-  
-   jobs_gender %>%   
-filter(year == 2013, major_category != "Healthcare Practitioners and Technical") %>% 
-  select(-starts_with("total")) %>% 
-  gather(gender, variable, value, -year, -major_category) %>%
-    group_by (major_category) %>% 
-    summarise(total = mean(total_lohn_female),
-              total = mean(total_earnings_male)) %>% 
-  mutate(gender = case_when(
-    str_detect(variable, "female") ~ "female",
-    str_detect(variable, "male") ~ "male"),
-    gehalt = case_when(
-    str_detect(variable, "lohn") ~ "lohn female",
-    str_detect(variable, "earnings") ~ "earnings male")) %>%  
-  mutate(value = value / 100) %>% 
-  ggplot() +
-  aes(x = major_category, y = value, fill = gehalt) + 
-  geom_bar(stat = "identity", position = "dodge") +
-  theme_minimal() +
-    coord_flip() +
-  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange)) 
-
- #Version Leonie
 jobs_gender %>% 
   filter(year == 2013, major_category!= "Healthcare Practitioners and Technical") %>% 
   select(major_category, year, total_earnings, total_earnings_male, total_earnings_female) %>% 
-  gather(gender, variable, -year, -major_category, -total_earnings) %>% 
-  group_by (major_category) %>% 
-  mutate(gender = case_when(
-    str_detect(variable, "female") ~ "female",
-    str_detect(variable, "male") ~ "male")) 
+  gather(gender, value, -year, -major_category, -total_earnings) %>% 
+  group_by (major_category, gender) %>% 
+  summarize(subtotal = sum(value)) %>% 
+  ungroup() %>% 
+  mutate(major_category = fct_reorder(major_category, subtotal)) %>% 
+  ggplot() +
+  aes(x = major_category, y= subtotal, fill = gender) +
+  coord_flip() +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Unterschiedliche Gehaltszahlungen nach Arbeit",
+       subtitle = "Balkendiagramm von Arbeitskategorie nach Geschlecht",
+       x = "Major Category",
+       y = "Earnings",
+       fill = "Legend")
    
 ```
 
+Man sieht in den Oberkategorien schon einen Unterschied in der Bezahlung. Zu drei gibt es keine Daten vom Verdienst der Frauen. Wie das in den Unterkategorien aussieht, schauen wir uns jetzt an:
+
+```{r}
+jobs_gender %>% 
+  filter(year == 2013, major_category!= "Healthcare Practitioners and Technical") %>% 
+  select(minor_category, year, total_earnings, total_earnings_male, total_earnings_female) %>% 
+  gather(gender, value, -year, -minor_category, -total_earnings) %>% 
+  group_by (minor_category, gender) %>% 
+  summarize(subtotal = sum(value)) %>% 
+  ungroup() %>% 
+  mutate(minor_category = fct_reorder(minor_category, subtotal)) %>% 
+  ggplot() +
+  aes(x = minor_category, y= subtotal, fill = gender) +
+  coord_flip() +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Unterschiedliche Gehaltszahlungen aufgeschlüsselt nach Unterkategorien",
+       subtitle = "Balkendiagramm von Arbeitskategorie nach Geschlecht",
+       x = "Major Category",
+       y = "Earnings",
+       fill = "Legend")
+```
+
+#### Ergebnis
+Es gibt oft einen deutlichen Unterschied in der Bezahlung von Männern und Frauen. Frauen verdienen oft weniger. Im Pflegebereich ist es fast ausgeglichen, aber auch dort verdienen Frauen weniger. 
