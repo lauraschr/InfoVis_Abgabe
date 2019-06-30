@@ -6,7 +6,8 @@ output: html_document
 ---
 
 ##College Abschlüsse in den USA und das Phänomen "Gender Pay Gap"
-Hier Erklärtext zum Problem.
+Wenn man die hohen Kosten eines Studiums in den USA berücksichtigt, muss sich ein Studierender dort gut entscheiden in welches Berufsfeld er oder sie einsteigen möchte. Mit welchem Abschluss man gute Jobchancen und die Aussicht auf eine gute Bezahlung hat, wird hier aufgezeigt. Aber nicht nur die Wahl des Studienfaches ist zu berücksichtigen, sondern auch die gleichberechtigte Bezahlung zwischen Männern und Frauen. 
+Das Phänomen "Gender Pay Gap" erklärt den prozentualen Brutto-Gehaltsunterschied zwischen Männer und Frauen. Dieser besagt, dass Frauen im Durchschnitt weniger verdienen, als Männer, trotz gleicher Arbeit. In Amerika wurde dazu in den 1980er Jahren die Red Purse Camapagne gegründet, die auf die roten Zahlen in Geldbörsen der Frauen hinweist. In Deutschland wurde dazu der "Equal Pay Day" eingeführt. Dieser besagt, dass Frauen 77 Tage im Jahr umsonst arbeiten, da sie im Schnitt weniger verdienen. Der nächste Equal Pay Day fällt auf den 17. März 2020. Dieser markiert den Tag, bis zu dem die Frauen umsonst arbeiten, während Männer schon ab dem 01. Januar Gehalt bekommen. 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, echo = FALSE)
 #install.packages("gridExtra")
@@ -33,7 +34,7 @@ rwthcolors <- hcictools::rwth.colorpalette()
 
 ```
 ### College Abschlüsse und Arbeitsbereiche nach Geschlecht
-Erklärtext blabla
+Der Datensatz "College Major & Income" soll vorbeugend auf Studierende in den USA wirken, denn ein College Abschluss heißt nicht, dass man eine Jobgarantie hat. Aber wie man seinen Abschluss aussucht, kann vorbeugend auf diese Situation wirken. Die Auswahl des Studienfaches scheint essentiell zu sein. Wer im Bereich Engineering studiert, hat bessere Chancen auf einen gut bezahlten Job, als Studierende, die sich für den Art Bereich entscheiden. Aber wer studiert hier eigentlich was? Oft gibt es einen großen Unterschied zwischen Männern und Frauen in den Studienfächern. 
 
 ```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category, echo=FALSE}
 
@@ -79,12 +80,11 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
 Hier kommt das erste Zwischenfazit. Keyfindings I: Business Sektor relativ ausgegleichen, ebenso sozialer Bereich. Technischer Bereich eher Männer; Gesundheit, Psychologie eher Frauen.
 Keyfindings II: Business und Service sehr ausgeglichen; Produktion, Construction Work und Technik eher Männer; Gesundhei, Kunst und Medien eher Frauen.
 
-### Wer arbeitet eigentlich mehr Vollzeit?
-Phänomen Frauen arbeiten oft auf Teilzeit, um bei den Kindern zu bleiben blabla.
+### Wie ist das Verhältnis von Voll- zu Teilzeit? Und wie sieht das nach Geschlecht aufgeteilt aus?
+Eine Teilzeit Anstellung wirkt auf den ersten Blick sehr attraktiv, so hat man mehr Zeit für andere Dinge. Ob wirklich so viele Menschen eine Teilzeit Beschäftigung haben, als eine Vollzeit, können wir hier sehen. 
+Gesellschaftlich wird häufig behauptet, Frauen würden deutlich mehr in Teilzeit arbeiten, als Männer. Immerhin müsste sich ja irgendwer um die Familie kümmern. Aber stimmt das? Immerhin ist seit einigen Jahren zu beobachten, dass Frauen genauso auf Karriere aus sind, wie Männer und ihnen ein guter Job in Vollzeit ebenso wichtig ist. Schauen wir uns das mal genauer an. 
 
-```{r full-time und part-time Vergleich}
-
-
+```{r}
 college_major %>% 
   select(Full_time, Part_time, Unemployed) %>% 
   gather(variable, value) %>%
@@ -103,9 +103,12 @@ college_major %>%
        x = "Type of Work",
        y = "Absolute Häufigkeit",
        fill = "Legend") 
+```
 
+Tatsächlich arbeiten mehr Angestellte in Vollzeit als in Teilzeit. Die Arbeitslosigkeit ist vergleichsweise gering. Aber wie sieht der Unterschied bei den Geschlechtern aus?
 
-# Version 2
+```{r full-time und part-time Vergleich}
+
 
 employed_gender %>% 
   filter(year == 2013) %>% 
@@ -152,7 +155,8 @@ employed_gender %>%
 ```
 
 #### Zwischenanalyse II
-Generell arbeiten mehr Menschen Vollzeit als Teilzeit. Bei College Abschlüssen ist die Arbeitslosigkeit vergleichsweise gering. Frauen arbeiten deutlich öfter in Teilzeit als Männer. Über die Jahre hat sich die Prozentzahl von Frauen in Voll- und Teilzeit aber kaum verändert. 
+Wir können sehen, dass Frauen tatsächlich häufiger in Teilzeit arbeiten, als Männer - nämlich 25% Frauen im Vergleich zu knapp 13% der Männer. 
+Über die Jahre hat sich die Prozentzahl von Frauen in Voll- und Teilzeit aber kaum verändert. nach 2010 stieg die Anzahl an Teilzeit Beschäftigungen leicht, während die Vollzeit Beschäftigung leicht abnahm. 
 
 ### Wie sieht es in den Kategorien nach dem College aus?
 Erklärtext und so weiter.
@@ -185,6 +189,9 @@ college_major %>%
 #### Zwischenfazit
 Kaum Unterschied zwischen College und Non-College Jobs. Deutlicher Unterschied zu Low-Wage Jobs. Es arbeiten also weniger Absolventen im Low Wage Bereich. 
 
+### Median vom Gehalt
+Tabelle einfügen. 
+
 ### Gender Pay Gap
 Schauen wir uns mal genauer an, was es mit dem Gender Pay Gap so auf sich hat. Ist das alles nur ein medial verbreitetes Problem? 
 So sah es 2013 in den USA aus. 
@@ -204,6 +211,7 @@ jobs_gender %>%
   aes(x = major_category, y= subtotal, fill = gender) +
   coord_flip() +
   geom_bar(stat = "identity", position = "dodge") +
+   scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
   labs(title = "Unterschiedliche Gehaltszahlungen nach Arbeit",
        subtitle = "Balkendiagramm von Arbeitskategorie nach Geschlecht",
        x = "Major Category",
@@ -227,6 +235,7 @@ jobs_gender %>%
   aes(x = minor_category, y= subtotal, fill = gender) +
   coord_flip() +
   geom_bar(stat = "identity", position = "dodge") +
+   scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
   labs(title = "Unterschiedliche Gehaltszahlungen aufgeschlüsselt nach Unterkategorien",
        subtitle = "Balkendiagramm von Arbeitskategorie nach Geschlecht",
        x = "Major Category",
