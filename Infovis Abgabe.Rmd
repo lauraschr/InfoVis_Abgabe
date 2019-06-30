@@ -43,15 +43,15 @@ college_major %>%
   select(Men, Women, Major_category) %>% 
   gather(gender, value, -Major_category) %>% 
   group_by(Major_category, gender) %>% 
-  summarise_at(vars(-Major_category, -gender), funs(mean)) %>%
+  summarize(total = sum(value)) %>%
   ungroup() %>% 
   ggplot() +
-  aes(x = Major_category, y = value, fill = gender) + geom_col() + coord_flip() +
+  aes(x = Major_category, y = total, fill = gender) + geom_col() + coord_flip() +
   scale_fill_manual(values = c(rwthcolors$blue, rwthcolors$red)) +
-  labs(title = "Es herrscht ein ausgeglichenes Verhältnis im Business Sektor",
+  labs(title = "Die meisten Abschlüsse gibt es im Business Sektor",
        subtitle = "Balkendiagramm von Abschluss nach Geschlecht",
        x = "Major Category",
-       y = "Häufigkeit",
+       y = "Value (absolute)",
        fill = "Legend")
 
 
@@ -59,16 +59,17 @@ college_major %>%
 jobs_gender %>% select(major_category, minor_category, workers_male, workers_female) %>% 
   gather(gender, value, -major_category, -minor_category) %>% 
   group_by(major_category, gender) %>% 
-   summarise_at(vars(-major_category, -gender), funs(mean)) %>% 
+   summarize(total = sum(value)) %>% 
   ungroup() %>% 
   ggplot() +
-  aes(x = major_category, y = value, fill = gender) + geom_col() + coord_flip() +
+  aes(x = major_category, y = total, fill = gender) + geom_col() + coord_flip() +
   scale_fill_discrete(name = "Legend", labels = c("Female", "Male")) +
   scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
-  labs(title = "In Büro-Jobs ist das Verhältnis relativ ausgeglichen",
+  labs(title = "Sales/Office sind bei Arbeitnehmern beliebt",
        subtitle = "Balkendiagramm von Job Kategorie nach Geschlecht",
        x = "Major Category",
-       y = "absolute Häufigkeit")
+       y = "Value (absolute)",
+       fill = "Legend")
   
 
 
@@ -87,17 +88,17 @@ college_major %>%
  select(Major_category, College_jobs, Non_college_jobs, Low_wage_jobs) %>% 
   gather(variable, value, -Major_category) %>%
   group_by(Major_category, variable) %>% 
-    summarise_at(vars(-Major_category, -variable), funs(mean)) %>% 
+   summarize(total = sum(value)) %>% 
   ungroup() %>% 
   ggplot() +
-  aes(x = variable, y = value, fill = variable) + 
+  aes(x = variable, y = total, fill = variable) + 
   geom_bar(stat = "identity", position = "dodge") +
   theme_minimal() +
   scale_fill_manual(values = c(rwthcolors$lightblue, rwthcolors$yellow, rwthcolors$maygreen)) +
-  labs(title = "Es gibt kaum einen Unterschied zwischen College und Non-College Jobs",
+  labs(title = "Die meisten Absolventen arbeiten in Non College Jobs",
        subtitle = "Balkendiagramm von Arbeit nach Kategorie",
        x = "Jobs",
-       y = "Value",
+       y = "Value (absolute)",
        fill = "Legend")
 
 ```
@@ -117,7 +118,6 @@ college_major %>%
     str_detect(variable, "Part") ~ "part time",
     str_detect(variable, "Full") ~ "full time",
     str_detect(variable, "Unemployed") ~ "unemployed")) %>%  
-  mutate(value = value / 100) %>% 
   ggplot() +
   aes(x = type_of_work, y = value, fill = type_of_work) + 
   geom_bar(stat = "identity", position = "dodge") +
@@ -126,7 +126,7 @@ college_major %>%
   labs(title = "Das Verhältnis zwischen Vollzeit, Teilzeit und arbeitslos",
        subtitle = "Balkendiagramm",
        x = "Type of Work",
-       y = "Absolute Häufigkeit",
+       y = "Value",
        fill = "Legend") 
 ```
 
@@ -154,7 +154,7 @@ employed_gender %>%
   labs(title = "Verhältnis von Vollzeit und Teilzeit",
        subtitle = "Balkendiagramm von Arbeitsverhältnis nach Geschlecht",
        x = "Gender",
-       y = "Value",
+       y = "Value (in percent points)",
        fill = "Legend")
   
 
@@ -211,10 +211,10 @@ jobs_gender %>%
   coord_flip() +
   geom_bar(stat = "identity", position = "dodge") +
    scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
-  labs(title = "Unterschiedliche Gehaltszahlungen aufgeschlüsselt nach Unterkategorien",
+  labs(title = "Gender Pay Gap",
        subtitle = "Balkendiagramm von Arbeitskategorie nach Geschlecht",
        x = "Major Category",
-       y = "Earnings",
+       y = "Earnings (in Dollar)",
        fill = "Legend")
 ```
 
