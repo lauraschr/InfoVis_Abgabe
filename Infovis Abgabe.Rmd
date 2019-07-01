@@ -47,13 +47,13 @@ college_major %>%
   ungroup() %>% 
   ggplot() +
   aes(x = Major_category, y = total, fill = gender) + geom_col() + coord_flip() +
+  scale_y_continuous(expand = expand_scale(0, 0)) +
   scale_fill_manual(values = c(rwthcolors$blue, rwthcolors$red)) +
   labs(title = "Die meisten Abschlüsse gibt es im Business Sektor",
        subtitle = "Balkendiagramm von Abschluss nach Geschlecht",
        x = "Major Category",
        y = "Value (absolute)",
        fill = "Legend")
-
 
 
 jobs_gender %>% select(major_category, minor_category, workers_male, workers_female) %>% 
@@ -63,8 +63,7 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
   ungroup() %>% 
   ggplot() +
   aes(x = major_category, y = total, fill = gender) + geom_col() + coord_flip() +
-  scale_fill_discrete(name = "Legend", labels = c("Female", "Male")) +
-  scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
+  scale_fill_manual(name = "Legend", labels = c("Female", "Male"), values = c(rwthcolors$red, rwthcolors$blue)) +
   labs(title = "Sales/Office sind bei Arbeitnehmern beliebt",
        subtitle = "Balkendiagramm von Job Kategorie nach Geschlecht",
        x = "Major Category",
@@ -93,13 +92,14 @@ college_major %>%
   ggplot() +
   aes(x = variable, y = total, fill = variable) + 
   geom_bar(stat = "identity", position = "dodge") +
+  ylim(c(0, 500000)) +
   theme_minimal() +
-  scale_fill_manual(values = c(rwthcolors$lightblue, rwthcolors$yellow, rwthcolors$maygreen)) +
+  scale_fill_manual(name = "Legend", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs"), values = c(rwthcolors$lightblue, rwthcolors$yellow, rwthcolors$maygreen)) +
   labs(title = "Die meisten Absolventen arbeiten in Non College Jobs",
        subtitle = "Balkendiagramm von Arbeit nach Kategorie",
        x = "Jobs",
-       y = "Value (absolute)",
-       fill = "Legend")
+       y = "Value (absolute)") +
+  scale_x_discrete(name = "Jobs", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs"))
 
 ```
 
@@ -111,23 +111,22 @@ Eine Teilzeit Anstellung wirkt auf den ersten Blick sehr attraktiv, so hat man m
 Gesellschaftlich wird häufig behauptet, Frauen würden deutlich mehr in Teilzeit arbeiten, als Männer. Immerhin müsste sich ja irgendwer um die Familie kümmern. Aber stimmt das? Immerhin ist seit einigen Jahren zu beobachten, dass Frauen genauso auf Karriere aus sind, wie Männer und ihnen ein guter Job in Vollzeit ebenso wichtig ist. Schauen wir uns das mal genauer an. 
 
 ```{r}
+
 college_major %>% 
   select(Full_time, Part_time, Unemployed) %>% 
   gather(variable, value) %>%
-  mutate(type_of_work = case_when(
-    str_detect(variable, "Part") ~ "part time",
-    str_detect(variable, "Full") ~ "full time",
-    str_detect(variable, "Unemployed") ~ "unemployed")) %>%  
+  group_by(variable) %>%  
+  summarize(total = sum(value)) %>% 
   ggplot() +
-  aes(x = type_of_work, y = value, fill = type_of_work) + 
+  aes(x = variable, y = total, fill = variable) + 
   geom_bar(stat = "identity", position = "dodge") +
   theme_minimal() +
-  scale_fill_manual(values = c(rwthcolors$turquois, rwthcolors$orange, rwthcolors$petrol)) +
+  scale_fill_manual(name = "Legend", labels = c("Full Time", "Part Time", "Unemployed"), values = c(rwthcolors$turquois, rwthcolors$orange, rwthcolors$petrol)) +
   labs(title = "Das Verhältnis zwischen Vollzeit, Teilzeit und arbeitslos",
        subtitle = "Balkendiagramm",
        x = "Type of Work",
-       y = "Value",
-       fill = "Legend") 
+       y = "Value") +
+  scale_x_discrete(name = "Type of Work", labels = c("Full Time", "Part Time", "Unemployed"))
 ```
 
 Tatsächlich arbeiten mehr Angestellte in Vollzeit als in Teilzeit. Die Arbeitslosigkeit ist vergleichsweise gering. Aber wie sieht der Unterschied bei den Geschlechtern aus?
@@ -210,12 +209,11 @@ jobs_gender %>%
   aes(x = minor_category, y= value, fill = gender) +
   coord_flip() +
   geom_bar(stat = "identity", position = "dodge") +
-   scale_fill_manual(values = c(rwthcolors$red, rwthcolors$blue)) +
+   scale_fill_manual(name = "Legend", labels = c("Female", "Male"), values = c(rwthcolors$red, rwthcolors$blue)) +
   labs(title = "Gender Pay Gap",
        subtitle = "Balkendiagramm von Arbeitskategorie nach Geschlecht",
        x = "Major Category",
-       y = "Earnings (in Dollar)",
-       fill = "Legend")
+       y = "Earnings (in Dollar)")
 ```
 
 #### Ergebnis
