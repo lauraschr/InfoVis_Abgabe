@@ -17,6 +17,8 @@ library(ggplot2)
 library(esquisse)
 library(gridExtra)
 library(here)
+library(DT)
+
 
 ```
 
@@ -36,7 +38,7 @@ rwthcolors <- hcictools::rwth.colorpalette()
 ### College Abschlüsse und Arbeitsbereiche nach Geschlecht
 Der Datensatz "College Major & Income" soll vorbeugend auf Studierende in den USA wirken, denn ein College Abschluss heißt nicht, dass man eine Jobgarantie hat. Aber wie man seinen Abschluss aussucht, kann vorbeugend auf diese Situation wirken. Die Auswahl des Studienfaches scheint essentiell zu sein. Wer im Bereich Engineering studiert, hat bessere Chancen auf einen gut bezahlten Job, als Studierende, die sich für den Art Bereich entscheiden. Aber wer studiert hier eigentlich was? Oft gibt es einen großen Unterschied zwischen Männern und Frauen in den Studienfächern. 
 
-```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category, echo=FALSE}
+```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category, echo=FALSE, fig.height=5, fig.width=9}
 
 college_major %>%
   filter(Major_category != "Agriculture & Natural Resources") %>% 
@@ -47,14 +49,16 @@ college_major %>%
   ungroup() %>% 
   ggplot() +
   aes(x = Major_category, y = total, fill = gender) + geom_col() + coord_flip() +
-  scale_y_continuous(expand = expand_scale(0, 0)) +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
   scale_fill_manual(values = c(rwthcolors$blue, rwthcolors$red)) +
   labs(title = "Die meisten Abschlüsse gibt es im Business Sektor",
        subtitle = "Balkendiagramm von Abschluss nach Geschlecht",
        x = "Major Category",
        y = "Value (absolute)",
        fill = "Legend")
+```
 
+```{r Diagramm 2, fig.height=5, fig.width=10}
 
 jobs_gender %>% select(major_category, minor_category, workers_male, workers_female) %>% 
   gather(gender, value, -major_category, -minor_category) %>% 
@@ -63,12 +67,13 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
   ungroup() %>% 
   ggplot() +
   aes(x = major_category, y = total, fill = gender) + geom_col() + coord_flip() +
-  scale_fill_manual(name = "Legend", labels = c("Female", "Male"), values = c(rwthcolors$red, rwthcolors$blue)) +
+  scale_fill_manual(name = "Legend", labels = c("Women", "Men"), values = c(rwthcolors$red, rwthcolors$blue)) +
   labs(title = "Sales/Office sind bei Arbeitnehmern beliebt",
        subtitle = "Balkendiagramm von Job Kategorie nach Geschlecht",
        x = "Major Category",
        y = "Value (absolute)",
-       fill = "Legend")
+       fill = "Legend") +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ","))
   
 
 
@@ -92,14 +97,14 @@ college_major %>%
   ggplot() +
   aes(x = variable, y = total, fill = variable) + 
   geom_bar(stat = "identity", position = "dodge") +
-  ylim(c(0, 500000)) +
   theme_minimal() +
   scale_fill_manual(name = "Legend", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs"), values = c(rwthcolors$lightblue, rwthcolors$yellow, rwthcolors$maygreen)) +
   labs(title = "Die meisten Absolventen arbeiten in Non College Jobs",
        subtitle = "Balkendiagramm von Arbeit nach Kategorie",
        x = "Jobs",
        y = "Value (absolute)") +
-  scale_x_discrete(name = "Jobs", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs"))
+  scale_x_discrete(name = "Jobs", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs")) +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ","))
 
 ```
 
@@ -121,11 +126,12 @@ college_major %>%
   aes(x = variable, y = total, fill = variable) + 
   geom_bar(stat = "identity", position = "dodge") +
   theme_minimal() +
-  scale_fill_manual(name = "Legend", labels = c("Full Time", "Part Time", "Unemployed"), values = c(rwthcolors$turquois, rwthcolors$orange, rwthcolors$petrol)) +
+  scale_fill_manual(name = "Legend", labels = c("Full Time", "Part Time", "Unemployed"), values = c(rwthcolors$turquois, rwthcolors$orange, rwthcolors$violet)) +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
   labs(title = "Das Verhältnis zwischen Vollzeit, Teilzeit und arbeitslos",
        subtitle = "Balkendiagramm",
        x = "Type of Work",
-       y = "Value") +
+       y = "Value (absolute") +
   scale_x_discrete(name = "Type of Work", labels = c("Full Time", "Part Time", "Unemployed"))
 ```
 
@@ -139,12 +145,11 @@ employed_gender %>%
   select(-starts_with("total")) %>% 
   gather(variable, value, -year) %>%
   mutate(gender = case_when(
-    str_detect(variable, "female") ~ "female",
-    str_detect(variable, "male") ~ "male"),
+    str_detect(variable, "female") ~ "Female",
+    str_detect(variable, "male") ~ "Male"),
     type_of_work = case_when(
-    str_detect(variable, "part") ~ "part time",
-    str_detect(variable, "full") ~ "full time")) %>%  
-  mutate(value = value / 100) %>% 
+    str_detect(variable, "part") ~ "Part Time",
+    str_detect(variable, "full") ~ "Full Time")) %>%  
   ggplot() +
   aes(x = gender, y = value, fill = type_of_work) + 
   geom_bar(stat = "identity", position = "dodge") +
@@ -153,7 +158,7 @@ employed_gender %>%
   labs(title = "Verhältnis von Vollzeit und Teilzeit",
        subtitle = "Balkendiagramm von Arbeitsverhältnis nach Geschlecht",
        x = "Gender",
-       y = "Value (in percent points)",
+       y = "Value (in percent)",
        fill = "Legend")
   
 
@@ -162,11 +167,10 @@ employed_gender %>%
   select(-starts_with("total")) %>% 
   gather(variable, value, -year) %>%
   mutate(gender = case_when(
-    str_detect(variable, "female") ~ "female"),
+    str_detect(variable, "female") ~ "Female"),
     type_of_work = case_when(
-    str_detect(variable, "part") ~ "part time",
-    str_detect(variable, "full") ~ "full time")) %>%  
-  mutate(value = value / 100) %>% 
+    str_detect(variable, "part") ~ "Part Time",
+    str_detect(variable, "full") ~ "Full Time")) %>%  
   ggplot() +
   aes(x = year, y = value, fill = type_of_work) + 
  geom_smooth() +
@@ -185,9 +189,19 @@ Wir können sehen, dass Frauen tatsächlich häufiger in Teilzeit arbeiten, als 
 
 ### Median vom Gehalt
  ![](Bilder/Tabelle.png)
+ 
+ 
+
+
 ```{r}
 
+college_major %>% select(Rank, Major, Major_category, Median) %>% mutate(Major = str_to_title(Major)) %>% 
+  datatable(caption = "Test", rownames = F, colnames = c("Rang", "Studiengang", "Studienkategorie", "Durchschnittsgehalt (in Dollar)")) 
+
+  
+
 ```
+
 
 ### Gender Pay Gap
 Schauen wir uns mal genauer an, was es mit dem Gender Pay Gap so auf sich hat. Ist das alles nur ein medial verbreitetes Problem? 
@@ -195,7 +209,8 @@ So sah es 2013 in den USA aus.
 
 Man sieht in den Oberkategorien schon einen Unterschied in der Bezahlung. Zu drei gibt es keine Daten vom Verdienst der Frauen. Wie das in den Unterkategorien aussieht, schauen wir uns jetzt an:
 
-```{r}
+  
+```{r fig.height=5, fig.width=9}
 
 jobs_gender %>% 
   filter(year == 2013, minor_category!= "Transportation", minor_category!= "Protective Service", minor_category!= "Material Moving", minor_category!= "Installation, Maintenance, and Repair", minor_category!="Healthcare Practitioners and Technical", minor_category!= "Construction and Extraction") %>% 
@@ -209,7 +224,8 @@ jobs_gender %>%
   aes(x = minor_category, y= value, fill = gender) +
   coord_flip() +
   geom_bar(stat = "identity", position = "dodge") +
-   scale_fill_manual(name = "Legend", labels = c("Female", "Male"), values = c(rwthcolors$red, rwthcolors$blue)) +
+   scale_fill_manual(name = "Legend", labels = c("Women", "Men"), values = c(rwthcolors$red, rwthcolors$blue)) +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
   labs(title = "Gender Pay Gap",
        subtitle = "Balkendiagramm von Arbeitskategorie nach Geschlecht",
        x = "Major Category",
