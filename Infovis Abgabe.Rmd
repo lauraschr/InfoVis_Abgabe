@@ -1,13 +1,13 @@
 ---
-title: "Infovis Abgabe"
+title: "Hausarbeit Informationsvisualisierung"
 author: "Leonie Düttmann, Laura Schröder"
-date: "5 6 2019"
+date: "5.Juni 2019"
 output: html_document
 ---
 
-##College Abschlüsse in den USA und das Phänomen "Gender Pay Gap"
-Wenn man die hohen Kosten eines Studiums in den USA berücksichtigt, muss sich ein Studierender dort gut entscheiden in welches Berufsfeld er oder sie einsteigen möchte. Mit welchem Abschluss man gute Jobchancen und die Aussicht auf eine gute Bezahlung hat, wird hier aufgezeigt. Aber nicht nur die Wahl des Studienfaches ist zu berücksichtigen, sondern auch die gleichberechtigte Bezahlung zwischen Männern und Frauen. 
-Das Phänomen "Gender Pay Gap" erklärt den prozentualen Brutto-Gehaltsunterschied zwischen Männer und Frauen. Dieser besagt, dass Frauen im Durchschnitt weniger verdienen, als Männer, trotz gleicher Arbeit. In Amerika wurde dazu in den 1980er Jahren die Red Purse Camapagne gegründet, die auf die roten Zahlen in Geldbörsen der Frauen hinweist. In Deutschland wurde dazu der "Equal Pay Day" eingeführt. Dieser besagt, dass Frauen 77 Tage im Jahr umsonst arbeiten, da sie im Schnitt weniger verdienen. Der nächste Equal Pay Day fällt auf den 17. März 2020. Dieser markiert den Tag, bis zu dem die Frauen umsonst arbeiten, während Männer schon ab dem 01. Januar Gehalt bekommen. 
+#Der amerikanische Arbeitsmarkt und das Phänomen "Gender Pay Gap"
+Mit dem High-School-Abschluss in der Tasche beginnt für viele junge Amerikaner ein ganz neuer Lebensabschnitt: das College. Dort können sie anhand eines sehr breitgefächerten Studienangebots ihre weitere Zukunft planen. Doch gibt es eigentlich Unterschiede zwischen Männern und Frauen innerhalb der Studienfächer? Und wie sieht es nach dem College aus? Unterscheiden sich die Arbeitszeiten und der Brutto-Lohn innerhalb der Branchen? Im folgenden Verlauf zeigen verschiedene Diagramme und Tabellen, wie sich Studienfach, Arbeitszeit und der Lohn bei Männern und Frauen unterscheiden.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, echo = FALSE)
 #install.packages("gridExtra")
@@ -35,8 +35,9 @@ college_major <- readr::read_csv("recent-grads.csv")
 rwthcolors <- hcictools::rwth.colorpalette()
 
 ```
-### College Abschlüsse und Arbeitsbereiche nach Geschlecht
-Der Datensatz "College Major & Income" soll vorbeugend auf Studierende in den USA wirken, denn ein College Abschluss heißt nicht, dass man eine Jobgarantie hat. Aber wie man seinen Abschluss aussucht, kann vorbeugend auf diese Situation wirken. Die Auswahl des Studienfaches scheint essentiell zu sein. Wer im Bereich Engineering studiert, hat bessere Chancen auf einen gut bezahlten Job, als Studierende, die sich für den Art Bereich entscheiden. Aber wer studiert hier eigentlich was? Oft gibt es einen großen Unterschied zwischen Männern und Frauen in den Studienfächern. 
+### College Abschlüsse in den USA nach Geschlecht
+Das Diagramm zum Datensatz „College Major & Income“ zeigt sehr deutlich, dass die meisten Studierenden in den USA sich für ein Studium im Bereich „Business“ entscheiden. Männer und Frauen sind in diesem Studienfach nahezu in gleicher Anzahl vertreten. Beschäftigt man sich nun allerdings etwas intensiver mit dem Diagramm fällt auf, dass Frauen vor allem in den Bereichen „Education“, „Psychology & Social Work“ und „Humanities & Library Arts“ vertreten sind. In den Fächern „Engineering“ und „Computer & Mathematics“ herrscht jedoch ein deutlicher Überschuss an Männern.
+
 
 ```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category, echo=FALSE, fig.height=5, fig.width=9}
 
@@ -58,6 +59,9 @@ college_major %>%
        fill = "Legend")
 ```
 
+###Amerikanischer Arbeitsmarkt nach Geschlecht
+Gehen wir nun einen Schritt weiter und schauen uns an, wie die Arbeitsverhältnisse in Amerika aussehen. In Anlehnung an das erste Diagramm ist hier sehr deutlich zu erkennen, dass Jobs in denen hauptsächlich Männer arbeiten eher einen technischen Schwerpunkt haben, genau wie in den Studienfächern zuvor. Frauen hingegen arbeiten eher im Gesundheitswesen, der Lehre oder im Medialen Bereich. Der Business- und Finanzsektor hingegen ist ausgeglichener.
+
 ```{r Diagramm 2, fig.height=5, fig.width=10}
 
 jobs_gender %>% select(major_category, minor_category, workers_male, workers_female) %>% 
@@ -68,8 +72,8 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
   ggplot() +
   aes(x = major_category, y = total, fill = gender) + geom_col() + coord_flip() +
   scale_fill_manual(name = "Legend", labels = c("Women", "Men"), values = c(rwthcolors$red, rwthcolors$blue)) +
-  labs(title = "Sales/Office sind bei Arbeitnehmern beliebt",
-       subtitle = "Balkendiagramm von Job Kategorie nach Geschlecht",
+  labs(title = "Sales und Office beschäftigt die meisten Arbeitnehmer",
+       subtitle = "Balkendiagramm von Job-Kategorie nach Geschlecht",
        x = "Major Category",
        y = "Value (absolute)",
        fill = "Legend") +
@@ -79,12 +83,14 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
 
 ```
 
-#### Ergebnisanalyse I
-Hier kommt das erste Zwischenfazit. Keyfindings I: Business Sektor relativ ausgegleichen, ebenso sozialer Bereich. Technischer Bereich eher Männer; Gesundheit, Psychologie eher Frauen.
-Keyfindings II: Business und Service sehr ausgeglichen; Produktion, Construction Work und Technik eher Männer; Gesundhei, Kunst und Medien eher Frauen.
+#### Zwischenfazit
+Die Aufteilung der Geschlechter auf bestimmte Arbeitsbereiche beginnt schon im College. Bereits dort differenziert sich sehr deutlich heraus, für welche Fachrichtungen sich Männer und Frauen entscheiden. Dementsprechend zieht sich dieser rote Faden auch durch den Arbeitsmarkt. Die typischen Klischees, dass Frauen eher im kreativen Sektor und Männer eher im technischen und mathematischen Bereich arbeiten werden an dieser Stelle bestätigt. Neutrale Sektoren bleiben sowohl im College auch im späteren Job der Business-, Vertriebs- und Service-Sektor.
+Allerdings gilt es nicht außer Acht zu lassen, dass angehende Studierende die freie Wahl bei ihren Studienfächern haben. Frauen könnten dementsprechend genauso einen technischen Schwerpunkt wählen, wie Männer einen kreativen. 
 
-### Wie sieht es in den Kategorien nach dem College aus?
-Erklärtext und so weiter.
+
+### Was nützt mir mein College-Abschluss im Job?
+Nach dem College geht es für die frisch gebackenen Absolventen zunächst einmal auf Jobsuche. Wir haben zuvor zwar gesehen, aus welchen Aspekten sich der amerikanische Arbeitsmarkt zusammensetzt, aber wer arbeitet im Endeffekt eigentlich wirklich in einem Job, in dem ihm sein Abschluss von Nutzen ist?
+
 
 ```{r College Jobs, Non College Jobs, Low Wage Jobs}
 
@@ -109,11 +115,11 @@ college_major %>%
 ```
 
 #### Zwischenfazit
-Kaum Unterschied zwischen College und Non-College Jobs. Deutlicher Unterschied zu Low-Wage Jobs. Es arbeiten also weniger Absolventen im Low Wage Bereich. 
+Die Mehrheit der Arbeitnehmer haben einen Job, für den sie ihren College-Abschluss nicht benötigen. Sie hätten also auch ohne eine teure und langjährige Ausbildung die gleiche Arbeit erledigen können. Nur knapp über 300.00 Arbeitnehmer benötigen einen College-Abschluss für ihre Tätigkeiten. Immerhin arbeiten jedoch die wenigsten Absolventen in unter- bzw. schlechtbezahlten Jobs. Durch höhere Bildungsabschlüsse haben die jungen Leute also sehr gute Chancen auf einen angemessenen bezahlten Arbeitsplatz.
 
-### Wie ist das Verhältnis von Voll- zu Teilzeit? Und wie sieht das nach Geschlecht aufgeteilt aus?
-Eine Teilzeit Anstellung wirkt auf den ersten Blick sehr attraktiv, so hat man mehr Zeit für andere Dinge. Ob wirklich so viele Menschen eine Teilzeit Beschäftigung haben, als eine Vollzeit, können wir hier sehen. 
-Gesellschaftlich wird häufig behauptet, Frauen würden deutlich mehr in Teilzeit arbeiten, als Männer. Immerhin müsste sich ja irgendwer um die Familie kümmern. Aber stimmt das? Immerhin ist seit einigen Jahren zu beobachten, dass Frauen genauso auf Karriere aus sind, wie Männer und ihnen ein guter Job in Vollzeit ebenso wichtig ist. Schauen wir uns das mal genauer an. 
+### Voll- und Teilzeit auf dem amerikanischen Arbeitsmarkt
+Nachdem unsere jungen Amerikaner ihre ersten Schritte in der Berufswelt gegangen sind, stellt sich allerdings noch die Frage, inwieweit sich die Beschäftigungsverhältnisse von weiblichen und männlichen Arbeitnehmern unterscheiden. Es hält sich auch hier in der Allgemeinheit das Klischee, dass Frauen häufiger in Teilzeit arbeiten als Männer, um sich um Familie und Haushalt kümmern zu können. Aber wer weiß, vielleicht hat sich in den letzten Jahrzehnten etwas auf dem Arbeitsmarkt verändert. Schauen wir uns das mal genauer an:
+
 
 ```{r}
 
@@ -135,7 +141,8 @@ college_major %>%
   scale_x_discrete(name = "Type of Work", labels = c("Full Time", "Part Time", "Unemployed"))
 ```
 
-Tatsächlich arbeiten mehr Angestellte in Vollzeit als in Teilzeit. Die Arbeitslosigkeit ist vergleichsweise gering. Aber wie sieht der Unterschied bei den Geschlechtern aus?
+Tatsächlich arbeiten mehr Angestellte in Vollzeit als in Teilzeit. Die Arbeitslosigkeit ist vergleichsweise gering. Aber wie sieht der Unterschied bei den Geschlechtern aus? Das folgende Diagramm zeigt noch einmal die Aufteilung von Vollzeit und Teilzeit nach Geschlecht sortiert aus dem Jahr 2013:
+
 
 ```{r full-time und part-time Vergleich}
 
@@ -175,22 +182,23 @@ employed_gender %>%
   aes(x = year, y = value, fill = type_of_work) + 
  geom_smooth() +
   labs(title = "Kaum Veränderung bei Beschäftigungsverhältnissen bei Frauen",
-       subtitle = "Liniendiagramm von Jahren, Geschlecht und Beschäftigunsverhältnis",
+       subtitle = "Liniendiagramm der Frauen von Jahren nach Beschäftigunsverhältnis",
        x = "Year",
        y = "Value (in percent)",
        fill = "Legend")
 
 ```
 
-#### Zwischenanalyse II
-Wir können sehen, dass Frauen tatsächlich häufiger in Teilzeit arbeiten, als Männer - nämlich 25% Frauen im Vergleich zu knapp 13% der Männer. 
-Über die Jahre hat sich die Prozentzahl von Frauen in Voll- und Teilzeit aber kaum verändert. nach 2010 stieg die Anzahl an Teilzeit Beschäftigungen leicht, während die Vollzeit Beschäftigung leicht abnahm. 
+#### Zwischenfazit
+Generell arbeiten ca. 2/3 der Arbeitnehmer in Vollzeit, während ca. 1/3 in Teilzeit arbeiten. Die Arbeitslosenquote hingegen ist eher gering. Schaut man jedoch auf die Verteilung von Voll- und Teilzeit nach Geschlecht ergeben sich deutlichere Unterschiede. Bei den weiblichen Arbeitnehmern arbeiten 75 % in Voll- und 25% in Teilzeit, bei den männlichen über 80% in Vollzeit. Auch über die letzten 50 Jahre hinweg hat sich die Verteilung bei Frauen von Voll- und Teilzeit nicht nennenswert verändert.Nach 2010 stieg die Anzahl an Teilzeit Beschäftigungen leicht, während die Vollzeit Beschäftigung leicht abnahm.
 
 
-### Median vom Gehalt
- ![](Bilder/Tabelle.png)
- 
- 
+##Wer verdient eigentlich was?
+Kommen wir nun zu einer Kategorie, die für viele Arbeitnehmer einer der wichtigsten überhaupt ist: dem Gehalt. Auch hier gibt es geschlechtliche Unterschiede. Bevor wir uns aber mit den Zahlen weiter beschäftigen, folgt nun eine kleine Exkursion in die Politik der Gleichberechtigung. Es geht um den „Gender Pay Gap“, der den prozentualen Brutto-Gehaltsunterschied zwischen Männern und Frauen erklärt. Dieser besagt, dass Frauen im Durchschnitt weniger verdienen als Männer, trotz gleicher Arbeit. In Amerika wurde dazu in den 1980er Jahren die Red Purse Camapagne gegründet, die auf die roten Zahlen in Geldbörsen der Frauen hinweist. In Deutschland wurde dazu der "Equal Pay Day" eingeführt. Dieser besagt, dass Frauen 77 Tage im Jahr umsonst arbeiten, da sie im Schnitt weniger verdienen. Der nächste Equal Pay Day fällt auf den 17. März 2020. Dieser markiert den Tag, bis zu dem die Frauen umsonst arbeiten, während die Männer schon ab dem 01. Januar ihr Gehalt beziehen. Inwieweit diese Gehaltsunterschiede existieren (oder nicht existieren) lässt sich in den folgenden Tabellen und Diagrammen ablesen.
+
+
+### "Mama, ich werde Ingenieur"
+Schauen wir aber zunächst auf die allgemeinen Gehälter, die unsere jungen Arbeitnehmer zu erwarten haben. Die folgende Tabelle ist interaktiv und du kannst dich selbstständig durch sie durchklicken und nach bestimmten Begriffen suchen.
 
 
 ```{r}
@@ -201,15 +209,12 @@ college_major %>% select(Rank, Major, Major_category, Median) %>% mutate(Major =
   
 
 ```
+Tabelle 1
+
+####Zwischenfazit
+Die besten Brutto-Jahres-Gehälter verdient man in Amerika im Bereich „Engineering“, die schlechtesten im „Education“ und „Psychology & Work“ Sektor. Erinnert ihr euch noch an das erste Diagramm, das die Belegung der Studienfächer nach Geschlecht angezeigt hat? Männer waren vor allem im „Engineering“ und in technischen Studienfächern vertreten, Frauen hingegen in Bildungs- und sozialorientierten. Frauen entscheiden sich vorab schon eher für schlechter bezahlte Berufsfelder und verdienen (im Allgemeinen) also auch weniger. Doch wie sieht es mit der Bezahlung aus, wenn Frauen und Männer im gleichen Sektor arbeiten? Das folgende Diagramm zeigt genau diese Daten aus dem Jahr 2013:
 
 
-### Gender Pay Gap
-Schauen wir uns mal genauer an, was es mit dem Gender Pay Gap so auf sich hat. Ist das alles nur ein medial verbreitetes Problem? 
-So sah es 2013 in den USA aus. 
-
-Man sieht in den Oberkategorien schon einen Unterschied in der Bezahlung. Zu drei gibt es keine Daten vom Verdienst der Frauen. Wie das in den Unterkategorien aussieht, schauen wir uns jetzt an:
-
-  
 ```{r fig.height=5, fig.width=9}
 
 jobs_gender %>% 
@@ -227,10 +232,33 @@ jobs_gender %>%
    scale_fill_manual(name = "Legend", labels = c("Women", "Men"), values = c(rwthcolors$red, rwthcolors$blue)) +
   scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
   labs(title = "Gender Pay Gap",
-       subtitle = "Balkendiagramm von Arbeitskategorie nach Geschlecht",
+       subtitle = "Balkendiagramm von Arbeitskategorie und Gehalt nach Geschlecht",
        x = "Major Category",
-       y = "Earnings (in Dollar)")
+       y = "Brutto Earnings per Year (in Dollar)")
 ```
 
-#### Ergebnis
-Es gibt oft einen deutlichen Unterschied in der Bezahlung von Männern und Frauen. Frauen verdienen oft weniger. Im Pflegebereich ist es fast ausgeglichen, aber auch dort verdienen Frauen weniger. 
+####Zwischenfazit
+Was zu allererst ins Auge fällt: Auch wenn der blaue und der rote Balken sehr nahe beieinanderliegen, so ist der Blaue überall (!) länger als der Rote. Männer verdienen also auch im gleichen Arbeitsbereich mehr als Frauen. Besonders ausgeprägt ist dies in den Feldern „Management“, „Legal“ und „Life, Physical and Social Science“. Etwas angeglichener ist es in „Personal Care and Service“ und „Food Preparation and Service Related“. Nichts desto trotz ist deutlich zu erkennen, dass Männer mehr verdienen als Frauen. 
+
+
+## Fazit:
+Bereits im College gibt es bei der Belegung der Studienfächer Unterschiede zwischen Männern und Frauen. Die Daten zeigen einen technischen Schwerpunkt bei Männern und einen sozialen bei Frauen. Dennoch gibt es auch ausgeglichene Studienfächer, zum Beispiel im Bereich „Business“.  Diese geschlechtliche Aufteilung zeigt sich dementsprechend auch auf dem Arbeitsmarkt. Hinzu kommt, dass mehr Frauen in Teilzeit arbeiten, als Männer und dass sich dies auch in den letzten 50 Jahren nicht nennenswert verändert hat. Männer verdienen im Vergleich zu Frauen außerdem mehr Geld, was unterschiedliche Gründe hat: Zum einen arbeiten mehr von ihnen in Vollzeit, zum anderen entscheiden sie sich eher für besser bezahlte Berufsfelder. Doch auch innerhalb der gleichen Arbeitssektoren haben männliche Arbeitnehmer am Ende des Jahres mehr Geld auf dem Konto, als ihre weiblichen Mitstreiterinnen. Es gilt jedoch zu beachten, dass Frauen die freie Wahl bei dem Schwerpunkt ihres Studiums haben und dass keine Frau gezwungen wird weniger Stunden zu arbeiten (wodurch natürlich der Lohn auch sinkt). Ebenfalls zu berücksichtigen ist, dass es innerhalb des gleichen Arbeitssektors unterschiedlich bezahlte Positionen gibt. Dennoch scheint es so, dass vor allem Männer diese höheren Positionen belegen. Die Daten haben also erhebliche Unterschiede zwischen Männern und Frauen in der Arbeitswelt gezeigt. Damit sich jedoch daran etwas ändern kann, müssen Frauen auf sich Aufmerksam machen und sich auch in männerdomminierte Arbeitsbereiche trauen und ihr Können unter Beweis stellen. 
+
+
+##Quellen:
+Die Daten für die Diagramme stammen aus dem "Tidy Tuesday":
+
+5.3.2019 
+Women in the Workplace
+https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-03-05
+
+16.10.2018
+College Major & Income 
+https://www.census.gov/programs-surveys/acs/data/pums.html
+
+Tabelle 1:
+Entweder die Website:
+https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
+
+oder die gleiche wie College-Major ich bin mir da nicht sicher
+
