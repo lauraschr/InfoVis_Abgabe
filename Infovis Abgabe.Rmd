@@ -36,7 +36,7 @@ rwthcolors <- hcictools::rwth.colorpalette()
 
 ```
 ### College Abschlüsse in den USA nach Geschlecht
-Das Diagramm zum Datensatz „College Major & Income“ zeigt sehr deutlich, dass die meisten Studierenden in den USA sich für ein Studium im Bereich „Business“ entscheiden. Männer und Frauen sind in diesem Studienfach nahezu in gleicher Anzahl vertreten. Beschäftigt man sich nun allerdings etwas intensiver mit dem Diagramm fällt auf, dass Frauen vor allem in den Bereichen „Education“, „Psychology & Social Work“ und „Humanities & Library Arts“ vertreten sind. In den Fächern „Engineering“ und „Computer & Mathematics“ herrscht jedoch ein deutlicher Überschuss an Männern.
+Das erste Diagramm zeigt zum einen die Anzahl von Studienabschlüssen aufgeschlüsselt nach Kategorien in den USA und zum anderen die Aufteilung auf diese Abschlüsse nach Geschlecht sortiert. Als erstes stellt sich natürlich die Frage, ob Männer und Frauen die gleichen Fächer belegen oder ob es Unterschiede bei den einzelnen Studienschwerpunkten gibt. Werfen wir mal einen genaueren Blick auf die Daten: 
 
 
 ```{r Diagramme I College Major nach Kategorie und Geschlecht; female und male workers nach major category, echo=FALSE, fig.height=5, fig.width=9}
@@ -84,7 +84,8 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
 ```
 
 #### Zwischenfazit
-Die Aufteilung der Geschlechter auf bestimmte Arbeitsbereiche beginnt schon im College. Bereits dort differenziert sich sehr deutlich heraus, für welche Fachrichtungen sich Männer und Frauen entscheiden. Dementsprechend zieht sich dieser rote Faden auch durch den Arbeitsmarkt. Die typischen Klischees, dass Frauen eher im kreativen Sektor und Männer eher im technischen und mathematischen Bereich arbeiten werden an dieser Stelle bestätigt. Neutrale Sektoren bleiben sowohl im College auch im späteren Job der Business-, Vertriebs- und Service-Sektor.
+Die Aufteilung der Geschlechter auf bestimmte Arbeitsbereiche beginnt schon im College. Bereits dort differenziert sich sehr deutlich heraus, für welche Fachrichtungen sich Männer und Frauen entscheiden. Der Bereich "Business" ist von beiden Geschlechtern sehr ausgeglichen belegt, während "Engineering" und "Computer & Mathematics" eher von Männern und die Bereiche „Education“, „Psychology & Social Work“ und „Humanities & Library Arts“ eher von Frauen dominiert werden.
+Dementsprechend zieht sich dieser rote Faden auch durch den Arbeitsmarkt. Die typischen Klischees, dass Frauen eher im kreativen Sektor und Männer eher im technischen und mathematischen Bereich arbeiten werden an dieser Stelle bestätigt. Neutrale Sektoren bleiben sowohl im College auch im späteren Job der Business-, Vertriebs- und Service-Sektor.
 Allerdings gilt es nicht außer Acht zu lassen, dass angehende Studierende die freie Wahl bei ihren Studienfächern haben. Frauen könnten dementsprechend genauso einen technischen Schwerpunkt wählen, wie Männer einen kreativen. 
 
 
@@ -104,7 +105,7 @@ college_major %>%
   aes(x = variable, y = total, fill = variable) + 
   geom_bar(stat = "identity", position = "dodge") +
   theme_minimal() +
-  scale_fill_manual(name = "Legend", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs"), values = c(rwthcolors$lightblue, rwthcolors$yellow, rwthcolors$maygreen)) +
+  scale_fill_manual(name = "Legend", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs"), values = c(rwthcolors$maygreen, rwthcolors$yellow, rwthcolors$lightblue)) +
   labs(title = "Die meisten Absolventen arbeiten in Non College Jobs",
        subtitle = "Balkendiagramm von Arbeit nach Kategorie",
        x = "Jobs",
@@ -194,11 +195,11 @@ Generell arbeiten ca. 2/3 der Arbeitnehmer in Vollzeit, während ca. 1/3 in Teil
 
 
 ##Wer verdient eigentlich was?
-Kommen wir nun zu einer Kategorie, die für viele Arbeitnehmer einer der wichtigsten überhaupt ist: dem Gehalt. Auch hier gibt es geschlechtliche Unterschiede. Bevor wir uns aber mit den Zahlen weiter beschäftigen, folgt nun eine kleine Exkursion in die Politik der Gleichberechtigung. Es geht um den „Gender Pay Gap“, der den prozentualen Brutto-Gehaltsunterschied zwischen Männern und Frauen erklärt. Dieser besagt, dass Frauen im Durchschnitt weniger verdienen als Männer, trotz gleicher Arbeit. In Amerika wurde dazu in den 1980er Jahren die Red Purse Camapagne gegründet, die auf die roten Zahlen in Geldbörsen der Frauen hinweist. In Deutschland wurde dazu der "Equal Pay Day" eingeführt. Dieser besagt, dass Frauen 77 Tage im Jahr umsonst arbeiten, da sie im Schnitt weniger verdienen. Der nächste Equal Pay Day fällt auf den 17. März 2020. Dieser markiert den Tag, bis zu dem die Frauen umsonst arbeiten, während die Männer schon ab dem 01. Januar ihr Gehalt beziehen. Inwieweit diese Gehaltsunterschiede existieren (oder nicht existieren) lässt sich in den folgenden Tabellen und Diagrammen ablesen.
+Kommen wir nun zu einer Kategorie, die für viele Arbeitnehmer einer der wichtigsten überhaupt ist: dem Gehalt. Auch hier gibt es geschlechtliche Unterschiede. Zunächst beschäftigen wir uns aber mit den Gehaltsklassen, die je nach Jobrichtung variieren. Denn ein College-Abschluss zu haben garantiert einem noch nicht einen ausreichenden Verdienst um damit monatlich über die Runden zu kommen. Schauen wir also auf die allgemeinen Gehälter, die unsere jungen Arbeitnehmer zu erwarten haben. Die folgende Tabelle ist interaktiv und du kannst dich selbstständig durch sie durchklicken und nach bestimmten Begriffen suchen.
 
 
 ### "Mama, ich werde Ingenieur"
-Schauen wir aber zunächst auf die allgemeinen Gehälter, die unsere jungen Arbeitnehmer zu erwarten haben. Die folgende Tabelle ist interaktiv und du kannst dich selbstständig durch sie durchklicken und nach bestimmten Begriffen suchen.
+Kommen wir nun zu einer Kategorie, die für viele Arbeitnehmer einer der wichtigsten überhaupt ist: dem Gehalt. Auch hier gibt es geschlechtliche Unterschiede. Zunächst beschäftigen wir uns aber mit den Gehaltsklassen, die je nach Jobrichtung variieren. Denn ein College-Abschluss zu haben garantiert einem noch nicht einen ausreichenden Verdienst um damit monatlich über die Runden zu kommen. Schauen wir also auf die allgemeinen Gehälter, die unsere jungen Arbeitnehmer zu erwarten haben. Die folgende Tabelle ist interaktiv und du kannst dich selbstständig durch sie durchklicken und nach bestimmten Begriffen suchen.
 
 
 ```{r}
@@ -211,9 +212,13 @@ college_major %>% select(Rank, Major, Major_category, Median) %>% mutate(Major =
 ```
 Tabelle 1
 
-####Zwischenfazit
-Die besten Brutto-Jahres-Gehälter verdient man in Amerika im Bereich „Engineering“, die schlechtesten im „Education“ und „Psychology & Work“ Sektor. Erinnert ihr euch noch an das erste Diagramm, das die Belegung der Studienfächer nach Geschlecht angezeigt hat? Männer waren vor allem im „Engineering“ und in technischen Studienfächern vertreten, Frauen hingegen in Bildungs- und sozialorientierten. Frauen entscheiden sich vorab schon eher für schlechter bezahlte Berufsfelder und verdienen (im Allgemeinen) also auch weniger. Doch wie sieht es mit der Bezahlung aus, wenn Frauen und Männer im gleichen Sektor arbeiten? Das folgende Diagramm zeigt genau diese Daten aus dem Jahr 2013:
 
+####Zwischenfazit
+Die besten Brutto-Jahres-Gehälter verdient man in Amerika im Bereich „Engineering“, die schlechtesten im „Education“ und „Psychology & Work“ Sektor. Erinnert ihr euch noch an das erste Diagramm, das die Belegung der Studienfächer nach Geschlecht angezeigt hat? Männer waren vor allem im „Engineering“ und in technischen Studienfächern vertreten, Frauen hingegen in Bildungs- und sozialorientierten. Frauen entscheiden sich vorab schon eher für schlechter bezahlte Berufsfelder und verdienen (im Allgemeinen) also auch weniger.
+
+
+###Gender Pay Gap
+Bevor wir uns nun mit den Gehältern beschäftigen, die Männer und Frauen im einzelnen zu erwarten haben, folgt zunächst eine kleine Exkursion in die Politik der Gleichberechtigung. Es geht um den „Gender Pay Gap“, der den prozentualen Brutto-Gehaltsunterschied zwischen Männern und Frauen erklärt. Dieser besagt, dass Frauen im Durchschnitt weniger verdienen als Männer, trotz gleicher Arbeit. In Amerika wurde dazu in den 1980er Jahren die Red Purse Camapagne gegründet, die auf die roten Zahlen in Geldbörsen der Frauen hinweist. In Deutschland wurde dazu der "Equal Pay Day" eingeführt. Dieser besagt, dass Frauen 77 Tage im Jahr umsonst arbeiten, da sie im Schnitt weniger verdienen. Der nächste Equal Pay Day fällt auf den 17. März 2020. Dieser markiert den Tag, bis zu dem die Frauen umsonst arbeiten, während die Männer schon ab dem 01. Januar ihr Gehalt beziehen. Inwieweit diese Gehaltsunterschiede existieren (oder nicht existieren) lässt sich anhand der Daten aus dem Jahre 2013 ablesen:
 
 ```{r fig.height=5, fig.width=9}
 
