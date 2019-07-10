@@ -1,11 +1,13 @@
 ---
-title: "Hausarbeit Informationsvisualisierung"
+title: "Der amerikanische Studien- und Arbeitsmarkt und der Gender Pay Gap"
+subtitle: "Hausarbeit Informationsvisualisierung und Sprache"
 author: "Leonie Düttmann, Laura Schröder"
-date: "5.Juni 2019"
+date: "10. Juli 2019"
 output: html_document
 ---
 
-#Der amerikanische Arbeitsmarkt und das Phänomen "Gender Pay Gap"
+
+## Der amerikanische Arbeitsmarkt und das Phänomen "Gender Pay Gap"
 Mit dem High-School-Abschluss in der Tasche beginnt für viele junge Amerikaner ein ganz neuer Lebensabschnitt: das College. Dort können sie anhand eines sehr breitgefächerten Studienangebots ihre weitere Zukunft planen. Doch gibt es eigentlich Unterschiede zwischen Männern und Frauen innerhalb der Studienfächer? Und wie sieht es nach dem College aus? Unterscheiden sich die Arbeitszeiten und der Brutto-Lohn innerhalb der Branchen? Im Folgenden wird aufgezeigt, wie sich Studienfach, Arbeitszeit und der Lohn bei Männern und Frauen unterscheiden.
 
 ```{r setup, include=FALSE}
@@ -20,8 +22,9 @@ library(here)
 library(DT)
 
 # Bei allen Diagrammen Schriftgröße anpassen!
-# Quellen anpassen
 # Glossar einfügen als Anhang
+# Github Link in Konzepterklärung einfügen
+# Daten überall anpassen
 ```
 
 
@@ -52,12 +55,13 @@ college_major %>%
   ungroup() %>% 
   ggplot() +
   aes(x = Major_category, y = total, fill = gender) + geom_col() + coord_flip() +
+  theme(axis.text  =element_text(size=10)) +
   scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
   scale_fill_manual(values = c(rwthcolors$blue, rwthcolors$red)) +
   labs(title = "Die meisten Abschlüsse gibt es im Business Sektor",
        subtitle = "Balkendiagramm von Abschluss nach Geschlecht",
        x = "Major Category",
-       y = "Value (absolute)",
+       y = "Number Of Students (absolute)",
        fill = "Legend")
 ```
 
@@ -73,11 +77,12 @@ jobs_gender %>% select(major_category, minor_category, workers_male, workers_fem
   ungroup() %>% 
   ggplot() +
   aes(x = major_category, y = total, fill = gender) + geom_col() + coord_flip() +
+  theme(axis.text  =element_text(size=11)) +
   scale_fill_manual(name = "Legend", labels = c("Women", "Men"), values = c(rwthcolors$red, rwthcolors$blue)) +
   labs(title = "Sales und Office beschäftigt die meisten Arbeitnehmer",
        subtitle = "Balkendiagramm von Job-Kategorie nach Geschlecht",
        x = "Major Category",
-       y = "Value (absolute)",
+       y = "Number Of Workers (absolute)",
        fill = "Legend") +
   scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ","))
   
@@ -110,9 +115,9 @@ college_major %>%
   scale_fill_manual(name = "Legend", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs"), values = c(rwthcolors$maygreen, rwthcolors$yellow, rwthcolors$lightblue)) +
   labs(title = "Die meisten Absolventen arbeiten in Non College Jobs",
        subtitle = "Balkendiagramm von Arbeit nach Kategorie",
-       x = "Jobs",
-       y = "Value (absolute)") +
-  scale_x_discrete(name = "Jobs", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs")) +
+       x = "Job Category",
+       y = "Number Of Workers") +
+  scale_x_discrete(name = "Job Category", labels = c("College Jobs", "Low Wage Jobs", "Non College Jobs")) +
   scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ","))
 
 ```
@@ -140,7 +145,7 @@ college_major %>%
   labs(title = "Das Verhältnis zwischen Vollzeit, Teilzeit und arbeitslos",
        subtitle = "Balkendiagramm",
        x = "Type of Work",
-       y = "Value (absolute") +
+       y = "Number Of Workers (absolute)") +
   scale_x_discrete(name = "Type of Work", labels = c("Full Time", "Part Time", "Unemployed"))
 ```
 
@@ -168,7 +173,7 @@ employed_gender %>%
   labs(title = "Verhältnis von Vollzeit und Teilzeit",
        subtitle = "Balkendiagramm von Arbeitsverhältnis nach Geschlecht",
        x = "Gender",
-       y = "Value (in percent)",
+       y = "Number Of Workers (in percent)",
        fill = "Legend")
   
 
@@ -186,7 +191,7 @@ employed_gender %>%
   labs(title = "Kaum Veränderung bei Beschäftigungsverhältnissen bei Frauen",
        subtitle = "Liniendiagramm der Frauen von Jahren nach Beschäftigunsverhältnis",
        x = "Year",
-       y = "Value (in percent)",
+       y = "Number Of Female Workers (in percent)",
        fill = "Legend")
 
 ```
@@ -213,6 +218,7 @@ college_major %>% select(Rank, Major, Major_category, Median) %>% mutate(Major =
 Tabelle 1: angelehnt an "The Economic Guide of Picking a College Major"
 
 
+
 ####Zwischenfazit
 Die besten Brutto-Jahres-Gehälter verdient man in Amerika im Bereich „Engineering“, die schlechtesten in „Education“ und „Psychology & Work“. Erinnert ihr euch noch an das erste Diagramm, das die Belegung der Studienfächer nach Geschlecht angezeigt hat? Männer waren vor allem in „Engineering“ und in technischen Studienfächern vertreten, Frauen hingegen in Bildungs- und sozialorientierten Studienfächern. Frauen entscheiden sich vorab schon eher für schlechter bezahlte Berufsfelder.
 
@@ -220,7 +226,7 @@ Die besten Brutto-Jahres-Gehälter verdient man in Amerika im Bereich „Enginee
 ###Gender Pay Gap
 Bevor wir uns nun mit den Gehältern beschäftigen, die Männer und Frauen im Einzelnen zu erwarten haben, folgt zunächst eine kleine Exkursion in die Politik der Gleichberechtigung. Es geht um den „Gender Pay Gap“, der den prozentualen Brutto-Gehaltsunterschied zwischen Männern und Frauen erklärt. Dieser besagt, dass Frauen im Durchschnitt weniger verdienen als Männer, trotz gleicher Arbeit. In Amerika wurde dazu in den 1980er Jahren die Red Purse Camapagne gegründet, die auf die roten Zahlen in Geldbörsen der Frauen hinweist. In Deutschland wurde dazu der "Equal Pay Day" eingeführt. Dieser besagt, dass Frauen 77 Tage im Jahr umsonst arbeiten, da sie im Schnitt weniger verdienen. Der nächste Equal Pay Day fällt auf den 17. März 2020. Dieser markiert den Tag, bis zu dem die Frauen umsonst arbeiten, während die Männer schon ab dem 01. Januar ihr Gehalt beziehen. Inwieweit diese Gehaltsunterschiede existieren (oder nicht existieren) lässt sich anhand der Daten aus dem Jahre 2013 ablesen:
 
-```{r fig.height=5, fig.width=9}
+```{r fig.height=5, fig.width=10}
 
 jobs_gender %>% 
   filter(year == 2013, minor_category!= "Transportation", minor_category!= "Protective Service", minor_category!= "Material Moving", minor_category!= "Installation, Maintenance, and Repair", minor_category!="Healthcare Practitioners and Technical", minor_category!= "Construction and Extraction") %>% 
@@ -234,6 +240,7 @@ jobs_gender %>%
   aes(x = minor_category, y= value, fill = gender) +
   coord_flip() +
   geom_bar(stat = "identity", position = "dodge") +
+  theme(axis.text  =element_text(size=11)) +
    scale_fill_manual(name = "Legend", labels = c("Women", "Men"), values = c(rwthcolors$red, rwthcolors$blue)) +
   scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
   labs(title = "Gender Pay Gap",
@@ -245,26 +252,57 @@ jobs_gender %>%
 
 ```
 
+```{r}
+
+jobs_gender %>% 
+  filter(year == 2013, minor_category!= "Transportation", minor_category!= "Protective Service", minor_category!= "Material Moving", minor_category!= "Installation, Maintenance, and Repair", minor_category!="Healthcare Practitioners and Technical", minor_category!= "Construction and Extraction") %>% 
+  select(minor_category, year, total_earnings, total_earnings_male, total_earnings_female) %>% 
+  gather(gender, value, -year, -minor_category, -total_earnings) %>% 
+  group_by (minor_category, gender) %>% 
+  summarise_at(vars (-minor_category, -gender), funs(mean))  %>% 
+   mutate(major_category = fct_reorder(minor_category, gender)) %>% 
+  ungroup() %>% 
+  ggplot() +
+  aes(x = minor_category, y= value, fill = gender) +
+  coord_flip() +
+  geom_bar(stat = "identity", position = "dodge") +
+  theme(axis.text  =element_text(size=11)) +
+   scale_fill_manual(name = "Legend", labels = c("Women", "Men"), values = c(rwthcolors$red, rwthcolors$blue)) +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
+  labs(title = "Gender Pay Gap",
+       subtitle = "Balkendiagramm von Arbeitskategorie und Gehalt nach Geschlecht",
+       x = "Major Category",
+       y = "Brutto Earnings per Year (in Dollar)")
+
+```
+
+
 ####Zwischenfazit
 Was zu allererst ins Auge fällt: Auch wenn der blaue und der rote Balken sehr nahe beieinanderliegen, so ist der Blaue überall (!) länger als der Rote. Frauen verdienen also auch im gleichen Arbeitsbereich weniger als Männer. Besonders ausgeprägt ist dies in den Feldern „Management“, „Legal“ und „Life, Physical and Social Science“. Etwas angeglichener ist es in „Personal Care and Service“ und „Food Preparation and Service Related“. Trotzdem ist deutlich zu erkennen, dass Frauen weniger verdienen als Männer. 
 
 
-## Fazit:
+## Fazit
 Bereits im College gibt es bei der Belegung der Studienfächer Unterschiede zwischen Männern und Frauen. Die Daten zeigen einen technischen Schwerpunkt bei Männern und einen Sozialen bei Frauen. Dennoch gibt es auch ausgeglichene Studienfächer, zum Beispiel im Bereich „Business“. Diese geschlechtliche Aufteilung zeigt sich dementsprechend auch auf dem Arbeitsmarkt. Hinzu kommt, dass mehr Frauen in Teilzeit arbeiten, als Männer und dass sich dies auch in den letzten 50 Jahren nicht nennenswert verändert hat. Männer verdienen im Vergleich zu Frauen außerdem mehr Geld, was unterschiedliche Gründe hat: Zum einen arbeiten mehr von ihnen in Vollzeit, zum anderen entscheiden sie sich eher für besser bezahlte Berufsfelder. Doch auch innerhalb der gleichen Arbeitssektoren haben männliche Arbeitnehmer am Ende des Jahres mehr Geld auf dem Konto, als ihre weiblichen Mitstreiterinnen. Es gilt jedoch zu beachten, dass Frauen die freie Wahl bei dem Schwerpunkt ihres Studiums haben und dass keine Frau gezwungen wird weniger Stunden zu arbeiten (wodurch natürlich der Lohn auch sinkt). Ebenfalls zu berücksichtigen ist, dass es innerhalb des gleichen Arbeitssektors unterschiedlich bezahlte Positionen gibt. Dennoch scheint es so, dass vor allem Männer diese höheren Positionen belegen. Die Daten haben also erhebliche Unterschiede zwischen Männern und Frauen in der Arbeitswelt gezeigt. Damit sich jedoch daran etwas ändern kann, müssen Frauen auf sich Aufmerksam machen, sich auch in männerdomminierte Arbeitsbereiche trauen und ihr Können unter Beweis stellen. 
 
 
-##Quellen:
-Die Daten für die Diagramme stammen aus dem "Tidy Tuesday":
+###Quellen
 
-College Major & Income (im Tidy Tuesday erschienen: 16.10.2018)
-https://www.census.gov/programs-surveys/acs/data/pums.html (zuletzt aufgerufen am: )
+Die Daten für die Diagramme stammen aus dem "Tidy Tuesday" (https://github.com/rfordatascience/tidytuesday, zuletzt aufgerufen am 10.07.2019):
 
-Women in the Workplace (im Tidy Tuesday erschienen: 5.3.2019)
+* College Major & Income (im Tidy Tuesday erschienen: 16.10.2018)
+https://www.census.gov/programs-surveys/acs/data/pums.html (zuletzt aufgerufen am: 10.07.2019)
 
-Equal Pay Day
+* Women in the Workplace (im Tidy Tuesday erschienen: 5.3.2019)
+https://www.census.gov/data/tables/time-series/demo/industry-occupation/median-earnings.html (zuletzt aufgerufen am 10.07.2019)
+   + Bureau of Labor Statistics, U.S. Department of Labor, The Economics Daily, Women’s earnings, 1979–2011 on the Internet at https://www.bls.gov/opub/ted/2012/ted_20121123.htm (zuletzt aufgerufen am 10.07.2019).
+   + Bureau of Labor Statistics, U.S. Department of Labor, The Economics Daily, Percentage of employed women working full time little changed over past 5 decades on the Internet at https://www.bls.gov/opub/ted/2017/percentage-of-employed-women-working-full-time-little-changed-over-past-5-decades.htm (zuletzt aufgerufen am 10.07.2019).
 
-Tabelle 1:
-Entweder die Website:
-https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/ (zuletzt aufgerufen am: )
+* https://www.equalpayday.de/ueber-epd/ (zuletzt aufgerufen am 10.07.2019)
+
+* Tabelle 1:
+https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/ (zuletzt aufgerufen am 10.07.2019)
+
+### Anhang
+
 
 
