@@ -19,7 +19,9 @@ library(gridExtra)
 library(here)
 library(DT)
 
-
+# Bei allen Diagrammen Schriftgröße anpassen!
+# Quellen anpassen
+# Glossar einfügen als Anhang
 ```
 
 
@@ -238,6 +240,9 @@ jobs_gender %>%
        subtitle = "Balkendiagramm von Arbeitskategorie und Gehalt nach Geschlecht",
        x = "Major Category",
        y = "Brutto Earnings per Year (in Dollar)")
+
+# Zweites Diagramm mit dem Unterschied der Zahlung
+
 ```
 
 ####Zwischenfazit
