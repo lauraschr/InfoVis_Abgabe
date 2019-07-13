@@ -2,7 +2,7 @@
 title: "Der amerikanische Studien- und Arbeitsmarkt und der Gender Pay Gap"
 subtitle: "Hausarbeit Informationsvisualisierung und Sprache"
 author: "Leonie Düttmann, Laura Schröder"
-date: "10. Juli 2019"
+date: "10.Juli 2019"
 output: html_document
 ---
 
@@ -40,6 +40,7 @@ college_major <- readr::read_csv("recent-grads.csv")
 rwthcolors <- hcictools::rwth.colorpalette()
 
 ```
+
 ### College Abschlüsse in den USA nach Geschlecht
 Als Erstes stellt sich natürlich die Frage, ob Männer und Frauen die gleichen Fächer belegen oder ob es Unterschiede bei den einzelnen Studienschwerpunkten gibt. Werfen wir mal einen genaueren Blick darauf: 
 
@@ -65,7 +66,7 @@ college_major %>%
        fill = "Legend")
 ```
 
-###Amerikanischer Arbeitsmarkt nach Geschlecht
+###Geschlechterverteilung am amerikanischen Arbeitsmarkt
 Gehen wir nun einen Schritt weiter und schauen uns an, wie die Arbeitsverhältnisse in Amerika aussehen. In Anlehnung an das erste Diagramm ist hier sehr deutlich zu erkennen, dass Jobs in denen hauptsächlich Männer arbeiten eher einen technischen Schwerpunkt haben, genau wie in den Studienfächern zuvor. Frauen hingegen arbeiten eher im Gesundheitswesen, der Lehre oder im medialen Bereich. Der Business- und Finanzsektor hingegen ist ausgeglichener.
 
 ```{r Diagramm 2, fig.height=5, fig.width=10}
@@ -152,7 +153,7 @@ college_major %>%
 Tatsächlich arbeiten mehr Angestellte in Vollzeit als in Teilzeit. Die Arbeitslosigkeit ist vergleichsweise gering. Aber wie sieht der Unterschied bei den Geschlechtern aus? Das folgende Diagramm zeigt noch einmal die Aufteilung von Vollzeit und Teilzeit nach Geschlecht sortiert aus dem Jahr 2013:
 
 
-```{r full-time und part-time Vergleich}
+```{r full-time und part-time Vergleich, echo=FALSE, message=FALSE, warning=FALSE}
 
 
 employed_gender %>% 
