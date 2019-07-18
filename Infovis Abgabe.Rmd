@@ -253,27 +253,33 @@ jobs_gender %>%
 
 ```
 
-```{r}
+```{r echo=FALSE}
+
+compute_diff <- function(x){
+  max(x) - min(x)
+}
 
 jobs_gender %>% 
   filter(year == 2013, minor_category!= "Transportation", minor_category!= "Protective Service", minor_category!= "Material Moving", minor_category!= "Installation, Maintenance, and Repair", minor_category!="Healthcare Practitioners and Technical", minor_category!= "Construction and Extraction") %>% 
   select(minor_category, year, total_earnings, total_earnings_male, total_earnings_female) %>% 
   gather(gender, value, -year, -minor_category, -total_earnings) %>% 
   group_by (minor_category, gender) %>% 
-  summarise_at(vars (-minor_category, -gender), funs(mean))  %>% 
-   mutate(major_category = fct_reorder(minor_category, gender)) %>% 
+  summarise_at(vars (value, -minor_category, -gender), funs(mean)) %>% 
+  summarise(difference = compute_diff(value)) %>% 
   ungroup() %>% 
-  ggplot() +
-  aes(x = minor_category, y= value, fill = gender) +
+ ggplot() +
+  aes(x = minor_category, y= difference) +
   coord_flip() +
-  geom_bar(stat = "identity", position = "dodge") +
-  theme(axis.text  =element_text(size=11)) +
-   scale_fill_manual(name = "Legend", labels = c("Women", "Men"), values = c(rwthcolors$red, rwthcolors$blue)) +
-  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
-  labs(title = "Gender Pay Gap",
-       subtitle = "Balkendiagramm von Arbeitskategorie und Gehalt nach Geschlecht",
+  geom_bar(stat = "identity") +
+  theme(axis.text  =element_text(size=11))  +
+  scale_y_continuous(labels = scales::percent_format(accuracy = NULL, scale = 100)) +
+  labs(title = "Differenz der Gehaltszahlungen",
+       subtitle = "Balkendiagramm der Differenz",
        x = "Major Category",
        y = "Brutto Earnings per Year (in Dollar)")
+
+  
+  
 
 ```
 
@@ -305,5 +311,6 @@ https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-maj
 
 ### Anhang
 
-
+![](Bilder/Glossar1.png)
+![](Bilder/Glossar2.png)
 
