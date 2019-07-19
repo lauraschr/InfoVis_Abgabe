@@ -253,7 +253,7 @@ jobs_gender %>%
 
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height=5, fig.width=9}
 
 compute_diff <- function(x){
   max(x) - min(x)
@@ -266,18 +266,17 @@ jobs_gender %>%
   group_by (minor_category, gender) %>% 
   summarise_at(vars (value, -minor_category, -gender), funs(mean)) %>% 
   summarise(difference = compute_diff(value)) %>% 
-  mutate(difference = difference / 100000) %>% 
   ungroup() %>% 
  ggplot() +
   aes(x = minor_category, y= difference) +
   coord_flip() +
   geom_bar(stat = "identity", fill = c(rwthcolors$bordeaux)) +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
   theme(axis.text = element_text(size=11))  +
-  scale_y_continuous(labels = scales::percent_format()) +
   labs(title = "Differenz der Gehaltszahlungen",
        subtitle = "Balkendiagramm der Differenz",
        x = "Major Category",
-       y = "Brutto Earnings per Year (in Dollar)")
+       y = "Difference per Year (in Dollar)")
 
   
   
@@ -286,7 +285,7 @@ jobs_gender %>%
 
 
 ####Zwischenfazit
-Was zu allererst ins Auge fällt: Auch wenn der blaue und der rote Balken sehr nahe beieinanderliegen, so ist der Blaue überall (!) länger als der Rote. Frauen verdienen also auch im gleichen Arbeitsbereich weniger als Männer. Besonders ausgeprägt ist dies in den Feldern „Management“, „Legal“ und „Life, Physical and Social Science“. Etwas angeglichener ist es in „Personal Care and Service“ und „Food Preparation and Service Related“. Trotzdem ist deutlich zu erkennen, dass Frauen weniger verdienen als Männer. 
+Was zu allererst ins Auge fällt: Auch wenn der blaue und der rote Balken sehr nahe beieinanderliegen, so ist der Blaue überall (!) länger als der Rote. Frauen verdienen also auch im gleichen Arbeitsbereich weniger als Männer. Besonders ausgeprägt ist dies in den Feldern „Management“, „Legal“ und „Life, Physical and Social Science“. Dort verdienen Frauen im Jahr knapp 15.000 Dollar weniger. Etwas angeglichener ist es in „Personal Care and Service“ und „Food Preparation and Service Related“. Dort beläuft sich der Gender Pay Gap auf wenige 1.000 Dollar im Jahr. Trotzdem ist deutlich zu erkennen, dass Frauen weniger verdienen als Männer. 
 
 
 ## Fazit
