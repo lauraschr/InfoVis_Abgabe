@@ -266,13 +266,14 @@ jobs_gender %>%
   group_by (minor_category, gender) %>% 
   summarise_at(vars (value, -minor_category, -gender), funs(mean)) %>% 
   summarise(difference = compute_diff(value)) %>% 
+  mutate(difference = difference / 100000) %>% 
   ungroup() %>% 
  ggplot() +
   aes(x = minor_category, y= difference) +
   coord_flip() +
-  geom_bar(stat = "identity") +
-  theme(axis.text  =element_text(size=11))  +
-  scale_y_continuous(labels = scales::percent_format(accuracy = NULL, scale = 100)) +
+  geom_bar(stat = "identity", fill = c(rwthcolors$bordeaux)) +
+  theme(axis.text = element_text(size=11))  +
+  scale_y_continuous(labels = scales::percent_format()) +
   labs(title = "Differenz der Gehaltszahlungen",
        subtitle = "Balkendiagramm der Differenz",
        x = "Major Category",
