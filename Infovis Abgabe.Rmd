@@ -270,7 +270,7 @@ jobs_gender %>%
  ggplot() +
   aes(x = minor_category, y= difference) +
   coord_flip() +
-  geom_bar(stat = "identity", fill = c(rwthcolors$bordeaux)) +
+  geom_bar(stat = "identity", fill = c(rwthcolors$petrol)) +
   scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
   theme(axis.text = element_text(size=11))  +
   labs(title = "Differenz der Gehaltszahlungen",
