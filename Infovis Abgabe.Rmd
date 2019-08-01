@@ -8,7 +8,7 @@ output: html_document
 
 
 ## Der amerikanische Arbeitsmarkt und das Phänomen "Gender Pay Gap"
-Mit dem High-School-Abschluss in der Tasche beginnt für viele junge Amerikaner ein ganz neuer Lebensabschnitt: das College. Dort können sie anhand eines sehr breitgefächerten Studienangebots ihre weitere Zukunft planen. Doch gibt es eigentlich Unterschiede zwischen Männern und Frauen innerhalb der Studienfächer? Und wie sieht es nach dem College aus? Unterscheiden sich die Arbeitszeiten und der Brutto-Lohn innerhalb der Branchen? Im Folgenden wird gezeigt, wie sich Studienfach, Arbeitszeit und der Lohn bei Männern und Frauen unterscheiden.
+Mit dem High-School-Abschluss in der Tasche beginnt für viele junge Amerikaner ein ganz neuer Lebensabschnitt: das College. Dort können sie anhand eines sehr breitgefächerten Studienangebots ihre weitere Zukunft planen. Doch gibt es eigentlich Unterschiede zwischen Männern und Frauen innerhalb der Studienfächer? Und wie sieht es nach dem College aus? Unterscheiden sich die Arbeitszeiten und der Brutto-Lohn innerhalb der Branchen? Im Folgenden wird gezeigt, wie sich Studienfach, Arbeitszeit und der Lohn bei Männern und Frauen unterscheiden. Da es sich um englischsprachige Datensätze handelt, ist am Ende dieses Artikels ein Glossar beigefügt, in dem die Jobkategorien und weitere Begriffe ins Deutsche übersetzt wurden. 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, echo = FALSE)
@@ -189,7 +189,7 @@ employed_gender %>%
   ggplot() +
   aes(x = year, y = value, fill = type_of_work) + 
  geom_smooth() +
-  labs(title = "Kaum Veränderung bei Beschäftigungsverhältnissen bei Frauen",
+  labs(title = "Kaum Veränderung bei Beschäftigungsverhältnissen von Frauen",
        subtitle = "Liniendiagramm der Frauen von Jahren nach Beschäftigunsverhältnis",
        x = "Year",
        y = "Number Of Female Workers (in percent)",
@@ -202,7 +202,7 @@ Generell arbeiten ca. 2/3 der Arbeitnehmer in Vollzeit, während ca. 1/3 in Teil
 
 
 ## Wer verdient eigentlich was?
-Kommen wir nun zu einer Kategorie, die für viele Arbeitnehmer einer der wichtigsten überhaupt ist: dem Gehalt. Auch hier gibt es geschlechtliche Unterschiede. Zunächst beschäftigen wir uns aber mit den Gehaltsklassen, die je nach Jobrichtung variieren. Denn ein College-Abschluss zu haben, garantiert einem noch nicht einen ausreichenden Verdienst um damit monatlich über die Runden zu kommen. Schauen wir also auf die allgemeinen Gehälter, die unsere jungen Arbeitnehmer zu erwarten haben. Die folgende Tabelle ist interaktiv und du kannst dich selbstständig durch sie durchklicken und nach bestimmten Studiengängen suchen.
+Kommen wir nun zu einer Kategorie, die für viele Arbeitnehmer einer der wichtigsten überhaupt ist: das Gehalt. Auch hier gibt es geschlechtliche Unterschiede. Zunächst beschäftigen wir uns aber mit den Gehaltsklassen, die je nach Jobrichtung variieren. Denn ein College-Abschluss zu haben, garantiert einem noch nicht einen ausreichenden Verdienst um damit monatlich über die Runden zu kommen. Schauen wir also auf die allgemeinen Gehälter, die unsere jungen Arbeitnehmer zu erwarten haben. Die folgende Tabelle ist interaktiv und du kannst dich selbstständig durch sie durchklicken und nach bestimmten Studiengängen suchen.
 
 
 ### "Mama, ich werde Ingenieur"
@@ -221,11 +221,11 @@ Tabelle 1: angelehnt an "The Economic Guide of Picking a College Major"
 
 
 ####Zwischenfazit
-Die besten Brutto-Jahres-Gehälter verdient man in Amerika im Bereich „Engineering“, die schlechtesten in „Education“ und „Psychology & Work“. Erinnert ihr euch noch an das erste Diagramm, das die Belegung der Studienfächer nach Geschlecht angezeigt hat? Männer waren vor allem in „Engineering“ und in technischen Studienfächern vertreten, Frauen hingegen in Bildungs- und sozialorientierten Studienfächern. Frauen entscheiden sich vorab schon eher für schlechter bezahlte Berufsfelder.
+Die besten Brutto-Jahres-Gehälter verdient man in Amerika im Bereich „Engineering“, die schlechtesten in „Education“ und „Psychology & Work“. Erinnert ihr euch noch an das erste Diagramm, das die Belegung der Studienfächer nach Geschlecht angezeigt hat? Männer waren vor allem in „Engineering“ und in technischen Studienfächern vertreten, Frauen hingegen in Bildungs- und sozialorientierten Studienfächern. Frauen tendieren also schon von Beginn an zu schlechter bezahlten Berufsfeldern.
 
 
 ###Gender Pay Gap
-Bevor wir uns nun mit den Gehältern beschäftigen, die Männer und Frauen im Einzelnen zu erwarten haben, folgt zunächst eine kleine Exkursion in die Politik der Gleichberechtigung. Es geht um den „Gender Pay Gap“, der den prozentualen Brutto-Gehaltsunterschied zwischen Männern und Frauen erklärt. Dieser besagt, dass Frauen im Durchschnitt weniger verdienen als Männer, trotz gleicher Arbeit. In Amerika wurde dazu in den 1980er Jahren die Red Purse Camapagne gegründet, die auf die roten Zahlen in Geldbörsen der Frauen hinweist. In Deutschland wurde dazu der "Equal Pay Day" eingeführt. Dieser besagt, dass Frauen 77 Tage im Jahr umsonst arbeiten, da sie im Schnitt weniger verdienen. Der nächste Equal Pay Day fällt auf den 17. März 2020. Dieser markiert den Tag, bis zu dem die Frauen umsonst arbeiten, während die Männer schon ab dem 01. Januar ihr Gehalt beziehen. Inwieweit diese Gehaltsunterschiede existieren (oder nicht existieren) lässt sich anhand der Daten aus dem Jahre 2013 ablesen:
+Bevor wir uns nun mit den Gehältern beschäftigen, die Männer und Frauen im Einzelnen zu erwarten haben, folgt zunächst eine kleine Exkursion in die Politik der Gleichberechtigung. Es geht um den „Gender Pay Gap“, der den prozentualen Brutto-Gehaltsunterschied zwischen Männern und Frauen erklärt. Dieser besagt, dass Frauen im Durchschnitt weniger verdienen als Männer, trotz gleicher Arbeit. In Amerika wurde dazu in den 1980er Jahren die Red Purse Camapagne gegründet, die auf die roten Zahlen in Geldbörsen der Frauen hinweist. In Deutschland wurde dazu der"Equal Pay Day" eingeführt. Dieser besagt, dass Frauen 77 Tage im Jahr umsonst arbeiten, da sie im Schnitt weniger verdienen. Der nächste Equal Pay Day fällt auf den 17. März 2020. Dieser markiert den Tag, bis zu dem die Frauen umsonst arbeiten, während die Männer schon ab dem 01. Januar ihr Gehalt beziehen. Inwieweit diese Gehaltsunterschiede existieren (oder nicht existieren) lässt sich anhand der Daten aus dem Jahre 2013 ablesen:
 
 ```{r fig.height=5, fig.width=10}
 
