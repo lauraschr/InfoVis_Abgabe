@@ -2,7 +2,7 @@
 title: "Der amerikanische Studien- und Arbeitsmarkt und der Gender Pay Gap"
 subtitle: "Hausarbeit Informationsvisualisierung und Sprache"
 author: "Leonie Düttmann, Laura Schröder"
-date: "03. August 2019"
+date: "03.August 2019"
 output: html_document
 ---
 
