@@ -21,9 +21,6 @@ library(gridExtra)
 library(here)
 library(DT)
 
-# Bei allen Diagrammen Schriftgröße anpassen!
-# Glossar einfügen als Anhang
-# Github Link in Konzepterklärung einfügen
 # Daten überall anpassen
 ```
 
@@ -249,7 +246,6 @@ jobs_gender %>%
        x = "Major Category",
        y = "Brutto Earnings per Year (in Dollar)")
 
-# Zweites Diagramm mit dem Unterschied der Zahlung
 
 ```
 
